@@ -1,0 +1,39 @@
+.pio
+.vscode/.browse.c_cpp.db*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/ipch
+
+# PlatformIO build and dependency directories
+.pio/
+.vscode/
+build/
+libdeps/
+
+# Mac-specific files
+.DS_Store
+__MACOSX/
+
+# Windows-specific files
+Thumbs.db
+desktop.ini
+
+# Python virtual environments (if using)
+.venv/
+venv/
+
+# PlatformIO configuration caches
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# IDE-specific files
+*.swp   # Vim swap files
+*.swo   # Vim swap files
+*.idea/ # JetBrains IDEs (CLion, PyCharm, etc.)
+
+# Generated firmware binaries
+firmware.bin
+firmware.elf
+firmware.hex
