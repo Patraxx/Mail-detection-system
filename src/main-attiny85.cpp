@@ -12,24 +12,17 @@ void setup() {
     for (int i = 0; i < 4; i++) {
     pinMode(pins[i], OUTPUT);
     }
-
-
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World");
-
-
 }
 
 void loop() {
 
-   for (int i = 0; i < 4; i++) {
-    digitalWrite(pins[i], HIGH);
-    delay(500);
+  
+    digitalWrite(PIN_1, HIGH);
+    delay(100);
     printf("LED ON\n");
-    digitalWrite(pins[i], LOW);
-    delay(500);
-   }
+    digitalWrite(PIN_1, LOW);
+    delay(100);
+   
 
   // put your main code here, to run repeatedly:
 }
