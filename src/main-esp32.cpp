@@ -2,20 +2,12 @@
 
 
 
-#define TESTPIN 32
+#define OUTPUT_PIN 32
 
 #define MULTIPLEX_A 26
 #define MULTIPLEX_B 25
 #define MULTIPLEX_C 33
 
-#define OUTPU_0_BINARY 0b000
-#define OUTPU_1_BINARY 0b001
-#define OUTPU_2_BINARY 0b010
-#define OUTPU_3_BINARY 0b011
-#define OUTPU_4_BINARY 0b100
-#define OUTPU_5_BINARY 0b101
-#define OUTPU_6_BINARY 0b110
-#define OUTPU_7_BINARY 0b111
 
 int selectionArray[8][3] = {
   {0, 0, 0},
@@ -28,32 +20,56 @@ int selectionArray[8][3] = {
   {1, 1, 1}
 };
 
+
 void multiplex_selection_task(void *pvParameters) {
+  Serial.println("Multiplex task started");
 
+    while (1) {
 
+      for (int i = 0; i < 8; i++) {
+        digitalWrite(MULTIPLEX_A, selectionArray[i][0]);
+        digitalWrite(MULTIPLEX_B, selectionArray[i][1]);
+        digitalWrite(MULTIPLEX_C, selectionArray[i][2]);
+        digitalRead(OUTPUT_PIN); 
 
-  while (1) {
+        // Read from the OUTPUT_PIN
+        int outputValue = digitalRead(OUTPUT_PIN);
 
-    for (int i = 0; i < 8; i++) {
-      digitalWrite(MULTIPLEX_A, selectionArray[i][0]);
-      digitalWrite(MULTIPLEX_B, selectionArray[i][1]);
-      digitalWrite(MULTIPLEX_C, selectionArray[i][2]);
-      vTaskDelay(20 / portTICK_PERIOD_MS);
+        
+        // Check if the pin is HIGH
+        if (outputValue == HIGH) {
+          Serial.print("Output ");
+          Serial.print(i);
+          Serial.println(" is HIGH");
+        }
     }
-
-
-    // put your main code here, to run repeatedly:
+    vTaskDelay(30 / portTICK_PERIOD_MS);
    
-    
-    vTaskDelay(5/ portTICK_PERIOD_MS);
   }
+  vTaskDelete(NULL);
+
+}
+
+void testPins(){
+
+  digitalWrite(MULTIPLEX_A, HIGH);
+  digitalWrite(MULTIPLEX_B, HIGH);
+  digitalWrite(MULTIPLEX_C, HIGH);
+
 }
 void setup() {
 
-  pinMode(TESTPIN, INPUT_PULLDOWN);
+  pinMode(OUTPUT_PIN, INPUT_PULLDOWN);
+  pinMode(MULTIPLEX_A, OUTPUT);
+  pinMode(MULTIPLEX_B, OUTPUT);
+  pinMode(MULTIPLEX_C, OUTPUT);
   Serial.begin(9600);
 
+  // xTaskCreate(multiplex_selection_task, "multiplex_selection_task", 2048, NULL, 1, NULL);
+
   // put your setup code here, to run once:
+
+   testPins();
 
 
 
@@ -62,8 +78,12 @@ void setup() {
 
 void loop() {
 
-  
+  int outputValue = digitalRead(OUTPUT_PIN);
 
+  if (outputValue == HIGH) {
+    Serial.println("Output is HIGH");
+  }
+ vTaskDelay(30 / portTICK_PERIOD_MS);
   // put your main code here, to run repeatedly:
 }
 
