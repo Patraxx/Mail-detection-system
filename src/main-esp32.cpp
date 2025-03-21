@@ -8,6 +8,10 @@
 #define MULTIPLEX_B 25
 #define MULTIPLEX_C 33
 
+#define CYCLE_PIN_BUTTON 31
+
+int currentPinSelected = 0;
+
 
 int selectionArray[8][3] = {
   {0, 0, 0},
@@ -20,7 +24,27 @@ int selectionArray[8][3] = {
   {1, 1, 1}
 };
 
+void cyclePinButtonTask(void *pvParameters) {
 
+  while(1)  {
+
+
+    if(digitalRead(CYCLE_PIN_BUTTON) == HIGH) {
+      currentPinSelected++;
+      if(currentPinSelected > 7) {
+        currentPinSelected = 0;
+      }
+      Serial.println("Current Pin Selected: " + String(currentPinSelected));
+    }
+    vTaskDelay(300/ portTICK_PERIOD_MS);
+ 
+  }  
+
+
+
+
+
+}
 void multiplex_selection_task(void *pvParameters) {
   Serial.println("Multiplex task started");
 
@@ -30,21 +54,16 @@ void multiplex_selection_task(void *pvParameters) {
         digitalWrite(MULTIPLEX_A, selectionArray[i][0]);
         digitalWrite(MULTIPLEX_B, selectionArray[i][1]);
         digitalWrite(MULTIPLEX_C, selectionArray[i][2]);
-        digitalRead(OUTPUT_PIN); 
 
-        // Read from the OUTPUT_PIN
-        int outputValue = digitalRead(OUTPUT_PIN);
+        Serial.print("Current Button is: " + String(i));
+        Serial.println(" || Status " + String(digitalRead(OUTPUT_PIN)));
 
-        
-        // Check if the pin is HIGH
-        if (outputValue == HIGH) {
-          Serial.print("Output ");
-          Serial.print(i);
-          Serial.println(" is HIGH");
-        }
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        // Read from the OUTPUT_PI
     }
-    vTaskDelay(30 / portTICK_PERIOD_MS);
-   
+    
+
+
   }
   vTaskDelete(NULL);
 
@@ -53,23 +72,24 @@ void multiplex_selection_task(void *pvParameters) {
 void testPins(){
 
   digitalWrite(MULTIPLEX_A, HIGH);
-  digitalWrite(MULTIPLEX_B, HIGH);
-  digitalWrite(MULTIPLEX_C, HIGH);
+  digitalWrite(MULTIPLEX_B, LOW);
+  digitalWrite(MULTIPLEX_C, LOW);
 
 }
 void setup() {
 
   pinMode(OUTPUT_PIN, INPUT_PULLDOWN);
+  pinMode(CYCLE_PIN_BUTTON, INPUT_PULLDOWN);
   pinMode(MULTIPLEX_A, OUTPUT);
   pinMode(MULTIPLEX_B, OUTPUT);
   pinMode(MULTIPLEX_C, OUTPUT);
   Serial.begin(9600);
 
-  // xTaskCreate(multiplex_selection_task, "multiplex_selection_task", 2048, NULL, 1, NULL);
+   xTaskCreate(multiplex_selection_task, "multiplex_selection_task", 2048, NULL, 1, NULL);
 
   // put your setup code here, to run once:
 
-   testPins();
+  // testPins();
 
 
 
@@ -78,12 +98,5 @@ void setup() {
 
 void loop() {
 
-  int outputValue = digitalRead(OUTPUT_PIN);
-
-  if (outputValue == HIGH) {
-    Serial.println("Output is HIGH");
-  }
- vTaskDelay(30 / portTICK_PERIOD_MS);
-  // put your main code here, to run repeatedly:
 }
 
