@@ -1,0 +1,14 @@
+#ifndef MAIN_H
+#define MAIN_H
+#define OUTPUT_PIN_1 32
+#define OUTPUT_PIN_2 18
+#define MULTIPLEXER_1_DISABLE 17
+#define MULTIPLEXER_2_DISABLE 5
+
+#define MULTIPLEX_A 26
+#define MULTIPLEX_B 25
+#define MULTIPLEX_C 33
+
+#define CYCLE_PIN_BUTTON 13
+
+#endif // MAIN_H
