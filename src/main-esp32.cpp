@@ -14,6 +14,7 @@ void setup() {
 
   pinMode(OUTPUT_PIN_1, INPUT_PULLDOWN); 
   pinMode(OUTPUT_PIN_2, OUTPUT);
+  pinMode(RAW_ADC_PIN, INPUT_PULLDOWN);
   pinMode(CYCLE_PIN_BUTTON, INPUT_PULLDOWN);
   pinMode(MULTIPLEX_A, OUTPUT);
   pinMode(MULTIPLEX_B, OUTPUT);
@@ -26,10 +27,14 @@ void setup() {
 
 }
 
+void read_adc() {
+  int rawValue = analogRead(RAW_ADC_PIN);
+  Serial.print("Raw ADC Value: ");
+  Serial.println(rawValue);
+}
+
 
 void loop() {
-
-  int inputState = digitalRead(OUTPUT_PIN_1);
 
   
 }

@@ -1,7 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
-#define OUTPUT_PIN_1 32
-#define OUTPUT_PIN_2 18
+#define OUTPUT_PIN_1 18
+#define OUTPUT_PIN_2 0
+#define RAW_ADC_PIN 32
 #define MULTIPLEXER_1_DISABLE 17
 #define MULTIPLEXER_2_DISABLE 5
 
