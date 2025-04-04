@@ -12,4 +12,6 @@
 
 #define CYCLE_PIN_BUTTON 13
 
+#define NUMBER OF COMPARTMENTS 16 // 8, 16, 24 ETC
+
 #endif // MAIN_H

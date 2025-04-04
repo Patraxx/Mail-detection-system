@@ -1,31 +1,28 @@
-#ifndef MAILBOXES_H
-#define MAILBOXES_H
+#ifndef Compartments_H
+#define Compartments_H
 #include <Arduino.h>
 #include "main.h"
 
 
-class Mailbox{
+class Compartments{
 private:
      int sensorArray[3];
-     int mailboxNumber;
-     String mailboxName;
+     int CompartmentNumber;
+     String CompartmentName;
      bool mailDetected;
 
 public:
-    Mailbox(int mailboxNumber){
-        this->mailboxNumber = mailboxNumber;
+ Compartments(int CompartmentNumber){
+        this-> CompartmentNumber = CompartmentNumber;
         this->mailDetected = false;
     }
     //skapa en constructor där 8 st fack skapas i taget, initialiseras med multiplexer_array
-    Mailbox(int mailboxNumber, int sensorArray[3]){
-        this->mailboxNumber = mailboxNumber;
+ Compartments(int CompartmentNumber, int sensorArray[3]){
+        this-> CompartmentNumber = CompartmentNumber;
         this->sensorArray[0] = sensorArray[0];
         this->sensorArray[1] = sensorArray[1];
         this->sensorArray[2] = sensorArray[2];
         this->mailDetected = false;
     }
 };
-
-
-
 #endif
