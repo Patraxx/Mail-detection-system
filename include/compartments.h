@@ -44,5 +44,21 @@ public:
     }
 
     static void compartmentCreator(Compartment compartments[], int amount);
+
+    static void printCompartmentInfo(Compartment compartments[], int amount){
+        for (int i = 0; i < amount; i++){
+            Serial.print("Compartment Number: ");
+            Serial.println(compartments[i].compartmentNumber);
+            Serial.print("Assigned Multiplexer: ");
+            Serial.println(compartments[i].assigned_multiplexer);
+            Serial.print("Sensor Array: ");
+            Serial.print(compartments[i].sensorArray[0]);
+            Serial.print(", ");
+            Serial.print(compartments[i].sensorArray[1]);
+            Serial.print(", ");
+            Serial.println(compartments[i].sensorArray[2]);
+            Serial.println();
+        }
+    };
 };
 #endif
