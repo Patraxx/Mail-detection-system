@@ -16,7 +16,7 @@ void setup() {
 
 void loop() {
 
-  
+
     digitalWrite(PIN_1, HIGH);
     delay(100);
     printf("LED ON\n");
