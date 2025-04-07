@@ -16,4 +16,6 @@
 
 #define NUMBER OF COMPARTMENTS 16 // 8, 16, 24 ETC
 
+const int multiplexer_disable_pins[2] = {MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
+
 #endif // MAIN_H

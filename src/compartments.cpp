@@ -1,7 +1,7 @@
 #include "compartments.h"
 
 
-static void compartmentCreator(Compartment compartments[], int amount){
+void Compartment::compartmentCreator(Compartment compartments[], int amount){
 
     
     for (int i = 0; i < amount; i++){
@@ -13,5 +13,21 @@ static void compartmentCreator(Compartment compartments[], int amount){
         String compartmentName = "Compartment " + String(i+1);
         compartments[i].setCompartmentName(compartmentName);
         
+    }
+}
+
+void Compartment::printCompartmentInfo(Compartment compartments[], int amount){
+    for (int i = 0; i < amount; i++){
+        Serial.print("Compartment Number: ");
+        Serial.println(compartments[i].compartmentNumber);
+        Serial.print("Assigned Multiplexer: ");
+        Serial.println(compartments[i].assigned_multiplexer);
+        Serial.print("Sensor Array: ");
+        Serial.print(compartments[i].sensorArray[0]);
+        Serial.print(", ");
+        Serial.print(compartments[i].sensorArray[1]);
+        Serial.print(", ");
+        Serial.println(compartments[i].sensorArray[2]);
+        Serial.println();
     }
 }
