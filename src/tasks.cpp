@@ -27,7 +27,6 @@ void multiplex_looper_task(void *pvParameters) {
 
       for (int i = 0; i < NUMBER_OF_COMPARTMENTS; i++) {
 
-        
        
       }
 
