@@ -5,6 +5,10 @@ CompartmentManager::CompartmentManager(int numCompartments) {
     compartments = new Compartment[totalCompartments];
 }
 
+CompartmentManager::~CompartmentManager() {
+    delete[] compartments;
+}
+
 void CompartmentManager::initializeCompartments() {
     for (int i = 0; i < totalCompartments; i++) {
         compartments[i].compartmentNumber = i + 1;

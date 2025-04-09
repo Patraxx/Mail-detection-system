@@ -17,7 +17,7 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
 
-  xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, NULL, 1, NULL);
+  xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
 
 
 }

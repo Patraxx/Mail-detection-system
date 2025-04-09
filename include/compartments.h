@@ -17,14 +17,14 @@ struct Compartment {
 class CompartmentManager{
  
 private: 
-    Compartment* compartments;
-    int totalCompartments;
+
 
 public:
 
+    Compartment* compartments;
+    int totalCompartments;
+
     CompartmentManager(int totalCompartments); 
-
-
     ~CompartmentManager();
 
     void initializeCompartments();
