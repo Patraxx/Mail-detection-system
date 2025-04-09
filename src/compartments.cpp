@@ -1,23 +1,25 @@
 #include "compartments.h"
 
+CompartmentManager::CompartmentManager(int numCompartments) {
+    totalCompartments = numCompartments;
+    compartments = new Compartment[totalCompartments];
+}
 
-void Compartment::compartmentCreator(Compartment compartments[], int amount){
-
-    
-    for (int i = 0; i < amount; i++){
-        compartments[i] = Compartment(i+1, multiplexer_array[i % 8]);
-
-        int assignedmultiplexer = i / 8 +1; 
-        compartments[i].setAssignedMultiplexer(assignedmultiplexer);
-
-        String compartmentName = "Compartment " + String(i+1);
-        compartments[i].setCompartmentName(compartmentName);
-        
+void CompartmentManager::initializeCompartments() {
+    for (int i = 0; i < totalCompartments; i++) {
+        compartments[i].compartmentNumber = i + 1;
+        compartments[i].assigned_multiplexer = i / 8 + 1; // Assign multiplexer (1-based index)
+        compartments[i].sensorArray[0] = multiplexer_array[i % 8][0];
+        compartments[i].sensorArray[1] = multiplexer_array[i % 8][1];
+        compartments[i].sensorArray[2] = multiplexer_array[i % 8][2];
+        compartments[i].compartmentName = "Compartment " + String(i + 1);
+        compartments[i].mailDetected = false; // Default value
     }
 }
 
-void Compartment::printCompartmentInfo(Compartment compartments[], int amount){
-    for (int i = 0; i < amount; i++){
+
+void CompartmentManager::printCompartmentInfo(){
+    for (int i = 0; i < totalCompartments; i++){
         Serial.print("Compartment Number: ");
         Serial.println(compartments[i].compartmentNumber);
         Serial.print("Assigned Multiplexer: ");

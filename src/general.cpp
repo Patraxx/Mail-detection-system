@@ -1,5 +1,6 @@
 
 #include "general.h"
+#include "main.h"
 
 bool timerRunning = false;
 unsigned long startTime = 0;
@@ -26,9 +27,16 @@ void timerloop(){
       }    
   }
 
-
  lastTimerState = currentTimerState;
 }
+
+void testPins(){
+
+    digitalWrite(MULTIPLEX_A, HIGH);
+    digitalWrite(MULTIPLEX_B, HIGH);
+    digitalWrite(MULTIPLEX_C, LOW);
+  
+  }
 
 
 

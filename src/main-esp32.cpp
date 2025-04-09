@@ -1,28 +1,15 @@
 #include <Arduino.h>
 #include "main.h"
 #include "tasks.h"
-#include "sensors.h"
 #include "compartments.h"
 
-Compartment compartments[16];
+CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
 
-void testPins(){
-
-  digitalWrite(MULTIPLEX_A, HIGH);
-  digitalWrite(MULTIPLEX_B, HIGH);
-  digitalWrite(MULTIPLEX_C, LOW);
-
-}
 void setup() {
 
-  Compartment::compartmentCreator(compartments, 16);
-
-
-
-  pinMode(OUTPUT_PIN_1, INPUT_PULLDOWN); 
-  pinMode(OUTPUT_PIN_2, OUTPUT);
-  pinMode(RAW_ADC_PIN, INPUT_PULLDOWN);
-  pinMode(CYCLE_PIN_BUTTON, INPUT_PULLDOWN);
+  pinMode(FINAL_INPUT, INPUT_PULLDOWN); 
+  pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
+  pinMode(MULTIPLEXER_2_DISABLE, OUTPUT);
   pinMode(MULTIPLEX_A, OUTPUT);
   pinMode(MULTIPLEX_B, OUTPUT);
   pinMode(MULTIPLEX_C, OUTPUT);
@@ -30,18 +17,10 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
 
-   //xTaskCreate(multiplex_looper_single_task, "multiplex_looper_single_task", 2048, NULL, 1, NULL);
+  xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, NULL, 1, NULL);
 
-   Compartment::printCompartmentInfo(compartments, 16);
 
 }
-
-void read_adc() {
-  int rawValue = analogRead(RAW_ADC_PIN);
-  Serial.print("Raw ADC Value: ");
-  Serial.println(rawValue);
-}
-
 
 void loop() {
 
