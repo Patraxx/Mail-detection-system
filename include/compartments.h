@@ -23,6 +23,7 @@ public:
 
     Compartment* compartments;
     int totalCompartments;
+    int currentCompartment = 1; // Current compartment being scanned
 
     CompartmentManager(int totalCompartments); 
     ~CompartmentManager();
