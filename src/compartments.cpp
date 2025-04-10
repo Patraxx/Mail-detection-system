@@ -37,3 +37,9 @@ void CompartmentManager::printCompartmentInfo(){
         Serial.println();
     }
 }
+
+void CompartmentManager::currentCompartmentReset() {
+    if (this->currentCompartment >= this->totalCompartments) {
+        this->currentCompartment = 0; // Reset to the first compartment if we reach the end
+    }
+}

@@ -20,6 +20,7 @@ void scan_multiplexer(int activeMultiplexer, const int disable_mux[], int num_mu
       compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = false; // Set mail detected to false for the current compartment
     }
     compartmentManager->currentCompartment++;
+    compartmentManager->currentCompartmentReset(); // Reset the current compartment if it exceeds the total number of compartments
   }
 }
 
