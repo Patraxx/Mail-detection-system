@@ -2,6 +2,21 @@
 #include "main.h"
 #include "compartments.h"
 
+void mailChecker(CompartmentManager* compartmentManager) {
+
+  bool previousState = compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected; // Store the previous state of mail detection
+  // Check if the mail is detected in the current compartment
+  if(digitalRead(FINAL_INPUT) == HIGH) { // Check if the final input pin is HIGH
+    compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = true; // Set mail detected to true for the current compartment
+  } else {
+    compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = false; // Set mail detected to false for the current compartment
+  }
+  if (compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected != previousState) { // If the state has changed
+  xTaskNotify(mailbox_printer_task)
+  }
+  compartmentManager->currentCompartment++;
+}
+
 void scan_multiplexer(int activeMultiplexer, const int disable_mux[], int num_mux, CompartmentManager* compartmentManager) {
 
   for (int i = 0; i < num_mux; i++) {
@@ -14,12 +29,10 @@ void scan_multiplexer(int activeMultiplexer, const int disable_mux[], int num_mu
 
     //vTaskDelay(5/portTICK_PERIOD_MS); // Wait for the multiplexer to switch
 
-    if(digitalRead(FINAL_INPUT) == HIGH) { // Check if the final input pin is HIGH
-      compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = true; // Set mail detected to true for the current compartment
-    } else {
-      compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = false; // Set mail detected to false for the current compartment
+    if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)){ // Wait for the mutex to be available
+     mailChecker(compartmentManager);
+     xSemaphoreGive(compartmentMutex); // Release the mutex after accessing the compartment
     }
-    compartmentManager->currentCompartment++;
     compartmentManager->currentCompartmentReset(); // Reset the current compartment if it exceeds the total number of compartments
   }
 }
@@ -37,6 +50,26 @@ void multiplex_looper_task(void *pvParameters) {
     }
   vTaskDelete(NULL);
 }
+
+void mailbox_printer_task(void *pvParameters) {
+  CompartmentManager* compartmentManager = static_cast<CompartmentManager*>(pvParameters);
+  while(1) {
+
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for notification from the mailChecker task
+    if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)) { // Wait for the mutex to be available
+      for (int i = 0; i < compartmentManager->totalCompartments; i++) {
+        if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment
+          Serial.print("Mail detected in compartment: ");
+          Serial.println(compartmentManager->compartments[i].compartmentNumber);
+        }
+      }
+      xSemaphoreGive(compartmentMutex); // Release the mutex after printing
+    }
+  }
+}
+
+
+
 
 
 
