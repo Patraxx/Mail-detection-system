@@ -1,0 +1,142 @@
+Let me break down how the `sendMailboxStatusBinary()` function works step by step:
+
+---
+
+### **Purpose of the Function**
+The goal of this function is to encode the `mailDetected` status of up to 16 mailboxes into a **16-bit integer** (`uint16_t`) and send it over `Serial2` as two bytes. Each bit in the 16-bit integer represents the `mailDetected` status of a specific mailbox:
+- `1` means mail is detected.
+- `0` means no mail is detected.
+
+---
+
+### **Step-by-Step Explanation**
+
+#### **1. Declare a 16-bit Integer (`uint16_t`)**
+```cpp
+uint16_t status = 0;
+```
+- `uint16_t` is an **unsigned 16-bit integer**, meaning it can store values from `0` to `65535` (16 bits = 2 bytes).
+- Initially, `status` is set to `0`, meaning all bits are `0` (no mail detected for any mailbox).
+
+---
+
+#### **2. Iterate Through All Compartments**
+```cpp
+for (int i = 0; i < totalCompartments; i++) {
+    if (compartments[i].mailDetected) {
+        status |= (1 << i); // Set the bit corresponding to the mailbox
+    }
+}
+```
+- This loop goes through all compartments in the `compartments` array.
+- For each compartment:
+  - If `mailDetected` is `true`, the corresponding bit in the `status` variable is set to `1`.
+  - If `mailDetected` is `false`, the bit remains `0`.
+
+---
+
+#### **3. How `status |= (1 << i)` Works**
+This line is the key to encoding the `mailDetected` status into the `status` variable.
+
+1. **`1 << i`**:
+   - This shifts the binary value `1` to the left by `i` positions.
+   - For example:
+     - If `i = 0`: `1 << 0` = `0000000000000001` (bit 0 is set).
+     - If `i = 1`: `1 << 1` = `0000000000000010` (bit 1 is set).
+     - If `i = 2`: `1 << 2` = `0000000000000100` (bit 2 is set).
+
+2. **`status |= (1 << i)`**:
+   - The `|=` operator performs a **bitwise OR** between `status` and `(1 << i)`.
+   - This sets the `i`-th bit of `status` to `1` without affecting the other bits.
+   - For example:
+     - If `status = 0000000000000000` and `i = 2`:
+       - `(1 << 2)` = `0000000000000100`
+       - `status |= (1 << 2)` = `0000000000000100`
+     - If `status = 0000000000000100` and `i = 3`:
+       - `(1 << 3)` = `0000000000001000`
+       - `status |= (1 << 3)` = `0000000000001100`
+
+---
+
+#### **4. Send the 16-Bit Status as Two Bytes**
+```cpp
+Serial2.write((status >> 8) & 0xFF); // Send the high byte
+Serial2.write(status & 0xFF);        // Send the low byte
+```
+- The `status` variable is a 16-bit integer, but `Serial2.write()` can only send one byte (8 bits) at a time. So, the 16-bit integer is split into two bytes:
+  1. **High Byte**:
+     - `(status >> 8)` shifts the 16-bit integer 8 bits to the right, leaving only the high byte.
+     - `& 0xFF` ensures that only the lower 8 bits of the result are kept.
+     - For example:
+       - If `status = 1010101010101010`:
+         - `(status >> 8)` = `0000000010101010`
+         - `(status >> 8) & 0xFF` = `10101010` (high byte).
+  2. **Low Byte**:
+     - `status & 0xFF` extracts the lower 8 bits of the 16-bit integer.
+     - For example:
+       - If `status = 1010101010101010`:
+         - `status & 0xFF` = `10101010` (low byte).
+
+- These two bytes are sent sequentially over `Serial2`.
+
+---
+
+### **Example Walkthrough**
+Let’s say you have 4 mailboxes, and their `mailDetected` statuses are as follows:
+- Mailbox 1: `true`
+- Mailbox 2: `false`
+- Mailbox 3: `true`
+- Mailbox 4: `false`
+
+#### **Step 1: Encode the Status**
+- Start with `status = 0` (binary: `0000000000000000`).
+- For each mailbox:
+  - Mailbox 1 (`i = 0`, `mailDetected = true`):
+    - `(1 << 0)` = `0000000000000001`
+    - `status |= (1 << 0)` → `status = 0000000000000001`
+  - Mailbox 2 (`i = 1`, `mailDetected = false`):
+    - No change to `status`.
+  - Mailbox 3 (`i = 2`, `mailDetected = true`):
+    - `(1 << 2)` = `0000000000000100`
+    - `status |= (1 << 2)` → `status = 0000000000000101`
+  - Mailbox 4 (`i = 3`, `mailDetected = false`):
+    - No change to `status`.
+
+Final `status` = `0000000000000101` (binary) = `5` (decimal).
+
+#### **Step 2: Send the Status**
+- High Byte:
+  - `(status >> 8)` = `00000000`
+  - `(status >> 8) & 0xFF` = `00000000` (high byte = `0`).
+- Low Byte:
+  - `status & 0xFF` = `00000101` (low byte = `5`).
+
+`Serial2.write()` sends:
+- High byte: `0`
+- Low byte: `5`
+
+---
+
+### **Receiving Side**
+On the receiving side, you can reconstruct the 16-bit status from the two bytes:
+```cpp
+uint16_t status = (highByte << 8) | lowByte;
+```
+Then, check each bit to determine the `mailDetected` status for each mailbox:
+```cpp
+for (int i = 0; i < 16; i++) {
+    if (status & (1 << i)) {
+        // Mail is detected for mailbox i + 1
+    } else {
+        // No mail for mailbox i + 1
+    }
+}
+```
+
+---
+
+### **Summary**
+- The function encodes the `mailDetected` status of up to 16 mailboxes into a 16-bit integer.
+- Each bit in the integer represents the status of one mailbox (`1` = mail detected, `0` = no mail).
+- The 16-bit integer is split into two bytes and sent over `Serial2`.
+- This approach is compact and efficient for transmitting the status of multiple mailboxes.
