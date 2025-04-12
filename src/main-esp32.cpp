@@ -9,6 +9,25 @@ SemaphoreHandle_t compartmentMutex; // Declare the mutex for compartment access
 
 TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 
+void receiveAndDecodeMailboxStatus(uint8_t* statusbyteOne, uint8_t* statusbyteTwo) {
+  
+
+      uint16_t status = (highByte << 8) | lowByte;
+
+      Serial.print("Received status: 0x");
+      Serial.println(status, HEX);
+
+      // Check each bit
+      for (int i = 0; i < 16; i++) {
+          bool hasMail = (status >> i) & 0x01;
+          Serial.print("Mailbox ");
+          Serial.print(i);
+          Serial.print(": ");
+          Serial.println(hasMail ? "📬 Mail" : "📭 Empty");
+      }
+  }
+}
+
 void setup() {
 
   pinMode(FINAL_INPUT, INPUT_PULLDOWN); 

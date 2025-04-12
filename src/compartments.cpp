@@ -53,7 +53,6 @@ void CompartmentManager::sendMailboxStatusBinary() {
             status |= (1 << i); // Set the bit corresponding to the mailbox
         }
     }
-
     // Send the 16-bit status as two bytes
     Serial2.write((status >> 8) & 0xFF); // Send the high byte
     Serial2.write(status & 0xFF);        // Send the low byte
