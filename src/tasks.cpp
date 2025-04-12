@@ -12,7 +12,8 @@ void mailChecker(CompartmentManager* compartmentManager) {
     compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected = false; // Set mail detected to false for the current compartment
   }
   if (compartmentManager->compartments[compartmentManager->currentCompartment].mailDetected != previousState) { // If the state has changed
-  xTaskNotify(mailbox_printer_task)
+
+    xTaskNotifyGive(mailboxPrinterTaskHandle); // Notify the mailbox printer task
   }
   compartmentManager->currentCompartment++;
 }
@@ -55,7 +56,7 @@ void mailbox_printer_task(void *pvParameters) {
   CompartmentManager* compartmentManager = static_cast<CompartmentManager*>(pvParameters);
   while(1) {
 
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for notification from the mailChecker task
+    ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(30000)); // Wait for notification from the mailChecker task
     if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)) { // Wait for the mutex to be available
       for (int i = 0; i < compartmentManager->totalCompartments; i++) {
         if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment

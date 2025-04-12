@@ -2,6 +2,7 @@
 #define MAIN_H
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
+#include "esp_log.h"
 
 #define FINAL_INPUT 18
 #define MULTIPLEXER_1_DISABLE 17
@@ -18,6 +19,7 @@
 
 #define NUMBER_OF_COMPARTMENTS 16 // 8, 16, 24 ETC
 
+extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 
 extern SemaphoreHandle_t compartmentMutex;
 
