@@ -11,6 +11,7 @@ struct Compartment {
     int compartmentNumber = 0;
     String compartmentName = "None";
     bool mailDetected = false;
+
 };
 
 
@@ -23,7 +24,7 @@ public:
 
     Compartment* compartments;
     int totalCompartments;
-    int currentCompartment = 1; // Current compartment being scanned
+    int currentCompartment = 1; // Current compartment being scanned // Buffer for storing the CSV string
 
     CompartmentManager(int totalCompartments); 
     ~CompartmentManager();
@@ -32,6 +33,7 @@ public:
     void printCompartmentInfo();
     void currentCompartmentReset();
     void sendMailboxStatusBinary();
+    void sendMailboxStatusCSV();
 
 
 };

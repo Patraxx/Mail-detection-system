@@ -21,6 +21,15 @@ void CompartmentManager::initializeCompartments() {
     }
 }
 
+void CompartmentManager::sendMailboxStatusCSV() {
+  
+        for (int i = 0; i < totalCompartments; i++) {
+        Serial2.print(compartments[i].mailDetected ? "1" : "0"); // Send 1 if mail is detected, otherwise send 0
+        if (i < totalCompartments - 1) {
+            Serial2.print(","); // Add comma between values
+        }  
+    }
+}
 
 void CompartmentManager::printCompartmentInfo(){
     for (int i = 0; i < totalCompartments; i++){
