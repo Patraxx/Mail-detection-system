@@ -3,11 +3,18 @@
 #include "tasks.h"
 #include "compartments.h"
 
+#define button_pin 8
 CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
 
 SemaphoreHandle_t compartmentMutex; // Declare the mutex for compartment access
 
 TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
+volatile bool buttonOne = false;
+
+void IRAM_ATTR buttonOneInterrupt() {
+  buttonOne = true;
+}
+
 
 void setup() {
 
@@ -36,6 +43,16 @@ void setup() {
 }
 
 void loop() {
+
+  if (buttonOne) {
+ 
+    sendMailBoxStatusCSV(Serial, &compartmentManager); // Send mailbox status CSV when button is press
+    buttonOne = false; // Reset the button state
+    vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to avoid multiple triggers
+  }
+
+
+
   
 
 }

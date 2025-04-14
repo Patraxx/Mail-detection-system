@@ -32,8 +32,8 @@ public:
     void initializeCompartments();
     void printCompartmentInfo();
     void currentCompartmentReset();
-    void sendMailboxStatusBinary();
-    void sendMailboxStatusCSV();
+
+  
 
 
 };

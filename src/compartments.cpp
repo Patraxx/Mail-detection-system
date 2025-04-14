@@ -21,15 +21,6 @@ void CompartmentManager::initializeCompartments() {
     }
 }
 
-void CompartmentManager::sendMailboxStatusCSV() {
-  
-        for (int i = 0; i < totalCompartments; i++) {
-        Serial2.print(compartments[i].mailDetected ? "1" : "0"); // Send 1 if mail is detected, otherwise send 0
-        if (i < totalCompartments - 1) {
-            Serial2.print(","); // Add comma between values
-        }  
-    }
-}
 
 void CompartmentManager::printCompartmentInfo(){
     for (int i = 0; i < totalCompartments; i++){
@@ -51,19 +42,4 @@ void CompartmentManager::currentCompartmentReset() {
     if (this->currentCompartment >= this->totalCompartments) {
         this->currentCompartment = 0; // Reset to the first compartment if we reach the end
     }
-}
-
-void CompartmentManager::sendMailboxStatusBinary() {
-    uint16_t status = 0;
-
-    // Encode the mailDetected status into a 16-bit integer
-    for (int i = 0; i < this->totalCompartments; i++) {
-        if (compartments[i].mailDetected) {
-            status |= (1 << i); // Set the bit corresponding to the mailbox
-        }
-    }
-
-    // Send the 16-bit status as two bytes
-    Serial2.write((status >> 8) & 0xFF); // Send the high byte
-    Serial2.write(status & 0xFF);        // Send the low byte
 }
