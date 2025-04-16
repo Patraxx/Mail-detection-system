@@ -31,7 +31,7 @@ void setup() {
   pinMode(MULTIPLEX_A, OUTPUT);
   pinMode(MULTIPLEX_B, OUTPUT);
   pinMode(MULTIPLEX_C, OUTPUT);
-
+  compartmentManager.initializeCompartments(); // Initialize the compartments
 
   Serial.begin(9600);
   delay(1000);
@@ -43,8 +43,14 @@ void setup() {
     Serial.println("Mutex created successfully");
   }
 
+  compartmentManager.printCompartmentInfo(); // Print compartment information
+
+  
+
+
+
   xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
-  xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task
+  xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
 
 
 }
@@ -58,7 +64,7 @@ void loop() {
   }
 
 
-  printADC(); // Print the ADC value to the serial monitor
+ // printADC(); // Print the ADC value to the serial monitor
 
 
 

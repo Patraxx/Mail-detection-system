@@ -60,7 +60,8 @@ void mailbox_printer_task(void *pvParameters) {
   CompartmentManager* compartmentManager = static_cast<CompartmentManager*>(pvParameters);
   while(1) {
 
-    ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(30000)); // Wait for notification from the mailChecker task   //Wait for 30 seconds and then print, unless a change occurs.
+    //ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(30000)); // Wait for notification from the mailChecker task   //Wait for 30 seconds and then print, unless a change occurs.
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for notification from the mailChecker task
     if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)) { // Wait for the mutex to be available
       for (int i = 0; i < compartmentManager->totalCompartments; i++) {
         if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment
