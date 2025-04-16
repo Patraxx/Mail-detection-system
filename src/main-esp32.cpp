@@ -33,6 +33,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
   pinMode(UNUSED_INPUT, INPUT_PULLDOWN);
+  pinMode(MULTIPLEXER_0_DISABLE, OUTPUT);
   pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
   pinMode(MULTIPLEXER_2_DISABLE, OUTPUT);
   pinMode(MULTIPLEX_A, OUTPUT);
