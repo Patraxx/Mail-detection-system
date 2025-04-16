@@ -15,6 +15,12 @@ void IRAM_ATTR buttonOneInterrupt() {
   buttonOne = true;
 }
 
+void printADC() {
+  int adcValue = analogRead(FINAL_INPUT); // Read the ADC value from the final input pin
+  Serial.println(adcValue); // Print the ADC value to the serial monitor
+  vTaskDelay(50/portTICK_PERIOD_MS); // Delay for 50 milliseconds
+}
+
 
 void setup() {
 
@@ -46,11 +52,13 @@ void setup() {
 void loop() {
 
   if (buttonOne) {
- 
     sendMailBoxStatusCSV(Serial, &compartmentManager); // Send mailbox status CSV when button is press
     buttonOne = false; // Reset the button state
     vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to avoid multiple triggers
   }
+
+
+  printADC(); // Print the ADC value to the serial monitor
 
 
 

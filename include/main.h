@@ -7,6 +7,8 @@
 #define singleMultiplexerMode 1
 
 
+
+
 #if ADC_MODE
   #define FINAL_INPUT 4  //ADC
   #define UNUSED_INPUT 18
@@ -26,8 +28,11 @@
 //TX: GPIO12, GPIO14, 
 
 // RX: GPIO13, GPIO15, 
-
-#define NUMBER_OF_COMPARTMENTS 16 // 8, 16, 24 ETC
+#if singleMultiplexerMode
+  #define NUMBER_OF_COMPARTMENTS 8 // 8, 16, 24 ETC
+#else
+  #define NUMBER_OF_COMPARTMENTS 24 // 8, 16, 24 ETC
+#endif
 
 extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 
