@@ -18,7 +18,8 @@ void IRAM_ATTR buttonOneInterrupt() {
 
 void setup() {
 
-  pinMode(FINAL_INPUT, INPUT_PULLDOWN); 
+  pinMode(FINAL_INPUT, INPUT_PULLDOWN);
+  pinMode(UNUSED_INPUT, INPUT_PULLDOWN);
   pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
   pinMode(MULTIPLEXER_2_DISABLE, OUTPUT);
   pinMode(MULTIPLEX_A, OUTPUT);

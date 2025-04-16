@@ -3,8 +3,16 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "esp_log.h"
+#define ADC_MODE 1
 
-#define FINAL_INPUT 18
+
+#if ADC_MODE
+  #define FINAL_INPUT 4  //ADC
+  #define UNUSED_INPUT 18
+#else
+  #define FINAL_INPUT 18
+  #define UNUSED_INPUT 4
+#endif
 #define MULTIPLEXER_1_DISABLE 21  //turn high to disable
 #define MULTIPLEXER_2_DISABLE 22   //turn high to disable
 #define MULTIPLEXER_3_DISABLE 23   //turn high to disable
