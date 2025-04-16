@@ -5,8 +5,9 @@
 #include "esp_log.h"
 
 #define FINAL_INPUT 18
-#define MULTIPLEXER_1_DISABLE 17
-#define MULTIPLEXER_2_DISABLE 5
+#define MULTIPLEXER_1_DISABLE 21  //turn high to disable
+#define MULTIPLEXER_2_DISABLE 22   //turn high to disable
+#define MULTIPLEXER_3_DISABLE 23   //turn high to disable
 #define MULTIPLEX_A 26
 #define MULTIPLEX_B 25
 #define MULTIPLEX_C 33
