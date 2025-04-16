@@ -59,7 +59,7 @@ void loop() {
 
   if (buttonOne) {
     #if debugMode
-    printCSVtoSerial(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
+    sendMailBoxStatusCSV(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
     #else
     sendMailBoxStatusCSV(Serial2, &compartmentManager); // Send mailbox status CSV when button is press
     #endif
