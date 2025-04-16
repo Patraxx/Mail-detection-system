@@ -46,7 +46,8 @@ void multiplex_looper_task(void *pvParameters) {
 
     while (1) {
       scan_multiplexer(0, multiplexer_disable_pins, 2, compartmentManager); // Scan the first multiplexer
-      scan_multiplexer(1, multiplexer_disable_pins, 2, compartmentManager); // Scan the second multiplexer    
+      scan_multiplexer(1, multiplexer_disable_pins, 2, compartmentManager); // Scan the second multiplexer  
+      scan_multiplexer(2, multiplexer_disable_pins, 2, compartmentManager); // Scan the third multiplexer  
       vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 1 second before the next scan  
     }
   vTaskDelete(NULL);

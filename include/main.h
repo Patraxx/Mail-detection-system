@@ -4,6 +4,7 @@
 #include "freertos/semphr.h"
 #include "esp_log.h"
 #define ADC_MODE 1
+#define singleMultiplexerMode 1
 
 
 #if ADC_MODE
@@ -22,9 +23,9 @@
 
 
 
-//TX: GPIO4, GPIO12, GPIO14, 
+//TX: GPIO12, GPIO14, 
 
-// RX: GPIO5, GPIO13, GPIO15, 
+// RX: GPIO13, GPIO15, 
 
 #define NUMBER_OF_COMPARTMENTS 16 // 8, 16, 24 ETC
 
@@ -32,7 +33,7 @@ extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mai
 
 extern SemaphoreHandle_t compartmentMutex;
 
-const int multiplexer_disable_pins[2] = {MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
+const int multiplexer_disable_pins[3] = {MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE, MULTIPLEXER_3_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
 
 const int multiplexer_array[8][3] = {
     {0, 0, 0},
