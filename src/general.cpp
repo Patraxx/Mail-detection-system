@@ -2,6 +2,7 @@
 #include "general.h"
 
 void sendMailBoxStatusCSV(HardwareSerial &Serial, CompartmentManager* compartmentManager) {
+  Serial.println("debug"); // Send header for mailbox status
   int totalCompartments = compartmentManager->totalCompartments; // Get the total number of compartments
   if (xSemaphoreTake(compartmentMutex, portMAX_DELAY)) {
     for (int i = 0; i < totalCompartments; i++) {

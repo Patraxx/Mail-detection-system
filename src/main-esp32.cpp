@@ -6,13 +6,19 @@
 #define button_pin 8
 CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
 
+volatile unsigned long lastInterruptTime = 0; // Variable to store the last interrupt time
+
 SemaphoreHandle_t compartmentMutex; // Declare the mutex for compartment access
 
 TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 volatile bool buttonOne = false;
 
 void IRAM_ATTR buttonOneInterrupt() {
-  buttonOne = true;
+  unsigned long interruptTime = millis(); // Get the current time in milliseconds
+  if (interruptTime - lastInterruptTime > 500) { // Check if the interrupt is not too close to the last one
+    buttonOne = true; // Set the button state to true
+    lastInterruptTime = interruptTime; // Update the last interrupt time
+  }
 }
 
 void printADC() {
@@ -23,7 +29,8 @@ void printADC() {
 
 
 void setup() {
-
+  pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
+  attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
   pinMode(UNUSED_INPUT, INPUT_PULLDOWN);
   pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
@@ -58,13 +65,14 @@ void setup() {
 void loop() {
 
   if (buttonOne) {
+    buttonOne = false;
     #if debugMode
     sendMailBoxStatusCSV(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
     #else
     sendMailBoxStatusCSV(Serial2, &compartmentManager); // Send mailbox status CSV when button is press
     #endif
-    buttonOne = false; // Reset the button state
-    vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to avoid multiple triggers
+
+     // Reset the button state
   }
 
 

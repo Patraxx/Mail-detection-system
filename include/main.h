@@ -23,6 +23,7 @@
 #define MULTIPLEX_A 26
 #define MULTIPLEX_B 25
 #define MULTIPLEX_C 33
+#define debugButton 13
 
 
 
