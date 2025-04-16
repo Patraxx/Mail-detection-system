@@ -58,7 +58,11 @@ void setup() {
 void loop() {
 
   if (buttonOne) {
-    sendMailBoxStatusCSV(Serial, &compartmentManager); // Send mailbox status CSV when button is press
+    #if debugMode
+    printCSVtoSerial(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
+    #else
+    sendMailBoxStatusCSV(Serial2, &compartmentManager); // Send mailbox status CSV when button is press
+    #endif
     buttonOne = false; // Reset the button state
     vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to avoid multiple triggers
   }
