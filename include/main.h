@@ -14,9 +14,9 @@
   #define FINAL_INPUT 18
   #define UNUSED_INPUT 4
 #endif
-#define MULTIPLEXER_1_DISABLE 21  //turn high to disable
-#define MULTIPLEXER_2_DISABLE 22   //turn high to disable
-#define MULTIPLEXER_3_DISABLE 23   //turn high to disable
+#define MULTIPLEXER_0_DISABLE 21  //turn high to disable
+#define MULTIPLEXER_1_DISABLE 22   //turn high to disable
+#define MULTIPLEXER_2_DISABLE 23   //turn high to disable
 #define MULTIPLEX_A 26
 #define MULTIPLEX_B 25
 #define MULTIPLEX_C 33
@@ -33,7 +33,7 @@ extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mai
 
 extern SemaphoreHandle_t compartmentMutex;
 
-const int multiplexer_disable_pins[3] = {MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE, MULTIPLEXER_3_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
+const int multiplexer_disable_pins[3] = {MULTIPLEXER_0_DISABLE, MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
 
 const int multiplexer_array[8][3] = {
     {0, 0, 0},

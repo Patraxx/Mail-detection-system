@@ -12,7 +12,7 @@ CompartmentManager::~CompartmentManager() {
 void CompartmentManager::initializeCompartments() {
     for (int i = 0; i < totalCompartments; i++) {
         compartments[i].compartmentNumber = i + 1;
-        compartments[i].assigned_multiplexer = i / 8 + 1; // Assign multiplexer (1-based index)
+        compartments[i].assigned_multiplexer = i / 8; // Assign multiplexer (1-based index)
         compartments[i].sensorArray[0] = multiplexer_array[i % 8][0];
         compartments[i].sensorArray[1] = multiplexer_array[i % 8][1];
         compartments[i].sensorArray[2] = multiplexer_array[i % 8][2];
