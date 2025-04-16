@@ -1,10 +1,5 @@
 
 #include "general.h"
-#include "main.h"
-#include "compartments.h"
-
-
-
 
 void sendMailBoxStatusCSV(HardwareSerial &Serial, CompartmentManager* compartmentManager) {
   int totalCompartments = compartmentManager->totalCompartments; // Get the total number of compartments
