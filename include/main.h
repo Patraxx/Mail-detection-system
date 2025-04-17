@@ -6,6 +6,7 @@
 #define ADC_MODE 1
 #define singleMultiplexerMode 1
 #define debugMode 1
+#define receiverCode 0
 
 
 

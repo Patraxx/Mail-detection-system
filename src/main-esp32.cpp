@@ -42,7 +42,7 @@ void setup() {
   compartmentManager.initializeCompartments(); // Initialize the compartments
 
   Serial.begin(9600);
-  Serial1.begin(115200, SERIAL_8N1, 16, 17); // Initialize Serial1 with RX and TX pins
+  Serial1.begin(9600, SERIAL_8N1, 16, 17); // Initialize Serial1 with RX and TX pins
   delay(1000);
 
   compartmentMutex = xSemaphoreCreateMutex(); // Create a mutex for compartment access
@@ -79,7 +79,18 @@ void loop() {
 
      // Reset the button state
   }
+  #if receiverCode
+  while (Serial.available()) {
+    char c = Serial.read();
+    incoming += c;
   
+    if (c == '\n') {
+      Serial.print("Sending this back via box: ");
+      Serial.println(incoming);
+      incoming = ""; // Reset for next line
+    }
+  }
+  #endif
   while (Serial1.available()) {
     char c = Serial1.read();
     incomingLine += c;
