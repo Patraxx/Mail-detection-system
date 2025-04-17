@@ -40,6 +40,8 @@ extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mai
 
 extern SemaphoreHandle_t compartmentMutex;
 
+
+ //rx 4e ner, TX 5:e ner, 
 const int multiplexer_disable_pins[3] = {MULTIPLEXER_0_DISABLE, MULTIPLEXER_1_DISABLE, MULTIPLEXER_2_DISABLE}; //lägg till om det behövs fler, detta är för 16 mailboxar
 
 const int multiplexer_array[8][3] = {

@@ -58,10 +58,17 @@ void multiplex_looper_task(void *pvParameters) {
 
 void mailbox_printer_task(void *pvParameters) {
   CompartmentManager* compartmentManager = static_cast<CompartmentManager*>(pvParameters);
+  unsigned long lastPrintTime = 0;
+  
   while(1) {
 
-    //ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(30000)); // Wait for notification from the mailChecker task   //Wait for 30 seconds and then print, unless a change occurs.
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for notification from the mailChecker task
+
+    unsigned long currentTime = millis(); // Get the current time in milliseconds
+    if (currentTime - lastPrintTime < 200) { // Check if enough time has passed since the last print
+      continue; // Skip printing if not enough time has passed
+    }
+
     if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)) { // Wait for the mutex to be available
       for (int i = 0; i < compartmentManager->totalCompartments; i++) {
         if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment

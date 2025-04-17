@@ -42,6 +42,7 @@ void setup() {
   compartmentManager.initializeCompartments(); // Initialize the compartments
 
   Serial.begin(9600);
+  Serial1.begin(115200, SERIAL_8N1, 16, 17); // Initialize Serial1 with RX and TX pins
   delay(1000);
 
   compartmentMutex = xSemaphoreCreateMutex(); // Create a mutex for compartment access
@@ -50,6 +51,8 @@ void setup() {
   } else {
     Serial.println("Mutex created successfully");
   }
+
+
 
   compartmentManager.printCompartmentInfo(); // Print compartment information
 
@@ -62,20 +65,32 @@ void setup() {
 
 
 }
+String incomingLine = ""; // Buffer for storing the incoming line
 
 void loop() {
 
   if (buttonOne) {
     buttonOne = false;
     #if debugMode
-    sendMailBoxStatusCSV(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
+    sendMailBoxStatusCSV(Serial1, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
     #else
     sendMailBoxStatusCSV(Serial2, &compartmentManager); // Send mailbox status CSV when button is press
     #endif
 
      // Reset the button state
   }
+  
+  while (Serial1.available()) {
+    char c = Serial1.read();
+    incomingLine += c;
 
+    if (c == '\n') {
+      // Full line received
+      Serial.print("Received: ");
+      Serial.print(incomingLine);  // already includes newline if sent
+      incomingLine = ""; // Reset for next line
+    }
+  }
 
  // printADC(); // Print the ADC value to the serial monitor
 
