@@ -67,30 +67,41 @@ void setup() {
 }
 String incomingLine = ""; // Buffer for storing the incoming line
 
+void continuousTestSerial(){
+    Serial.println("Test message from box-esp"); // Print a test message to the serial monitor
+    vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
+}
+
+#if receiverCode
+
+void loop(){
+
+  continuousTestSerial(); // Call the continuous test function
+  
+}
+#else
 void loop() {
 
-  if (buttonOne) {
-    buttonOne = false;
-    #if debugMode
-    sendMailBoxStatusCSV(Serial1, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
-    #else
-    sendMailBoxStatusCSV(Serial2, &compartmentManager); // Send mailbox status CSV when button is press
-    #endif
 
-     // Reset the button state
-  }
-  #if receiverCode
   while (Serial.available()) {
     char c = Serial.read();
-    incoming += c;
+    incomingLine += c;
   
     if (c == '\n') {
       Serial.print("Sending this back via box: ");
-      Serial.println(incoming);
-      incoming = ""; // Reset for next line
+      Serial.println(incomingLine);  // Print the received line to the serial monitor
+      incomingLine = ""; // Reset for next line
     }
   }
-  #endif
+  if (buttonOne) {
+    buttonOne = false;
+    #if debugMode
+    sendMailBoxStatusCSV(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
+    #else
+    sendMailBoxStatusCSV(Serial1, &compartmentManager); // Send mailbox status CSV when button is press
+    #endif
+     // Reset the button state
+  }
   while (Serial1.available()) {
     char c = Serial1.read();
     incomingLine += c;
@@ -102,12 +113,9 @@ void loop() {
       incomingLine = ""; // Reset for next line
     }
   }
-
- // printADC(); // Print the ADC value to the serial monitor
-
-
-
   
 
 }
+
+#endif
 
