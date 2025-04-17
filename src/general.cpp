@@ -17,3 +17,8 @@ void sendMailBoxStatusCSV(HardwareSerial &Serial, CompartmentManager* compartmen
     xSemaphoreGive(compartmentMutex); // Release the mutex after sending the header
   }
 }
+
+void continuousTestSerial(){
+  Serial.println("Test message from box-esp"); // Print a test message to the serial monitor
+  vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
+}

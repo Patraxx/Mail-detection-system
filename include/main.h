@@ -5,8 +5,8 @@
 #include "esp_log.h"
 #define ADC_MODE 1
 #define singleMultiplexerMode 1
-#define debugMode 1
-#define receiverCode 1
+#define debugMode 0
+#define receiverCode 0
 
 
 

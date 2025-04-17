@@ -10,5 +10,6 @@
 
 void timerloop();
 void sendMailBoxStatusCSV(HardwareSerial &Serial, CompartmentManager* compartmentManager); // Function to send mailbox status as CSV
+void continuousTestSerial(); // Function to send test message continuously
 
 #endif // GENERAL_H

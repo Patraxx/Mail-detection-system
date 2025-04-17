@@ -54,7 +54,7 @@ void setup() {
 
 
 
-  compartmentManager.printCompartmentInfo(); // Print compartment information
+ // compartmentManager.printCompartmentInfo(); // Print compartment information
 
   
 
@@ -67,32 +67,27 @@ void setup() {
 }
 String incomingLine = ""; // Buffer for storing the incoming line
 
-void continuousTestSerial(){
-    Serial.println("Test message from box-esp"); // Print a test message to the serial monitor
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
-}
+
 
 #if receiverCode
 
 void loop(){
 
-  continuousTestSerial(); // Call the continuous test function
-  
-}
-#else
-void loop() {
-
-
-  while (Serial.available()) {
+ while (Serial.available()) {
     char c = Serial.read();
     incomingLine += c;
   
     if (c == '\n') {
-      Serial.print("Sending this back via box: ");
+      Serial.print("The box has received this mailbox info: ");
       Serial.println(incomingLine);  // Print the received line to the serial monitor
       incomingLine = ""; // Reset for next line
     }
   }
+}
+#else
+
+void loop() {
+
   if (buttonOne) {
     buttonOne = false;
     #if debugMode
@@ -104,18 +99,8 @@ void loop() {
   }
   while (Serial1.available()) {
     char c = Serial1.read();
-    incomingLine += c;
-
-    if (c == '\n') {
-      // Full line received
-      Serial.print("Received: ");
-      Serial.print(incomingLine);  // already includes newline if sent
-      incomingLine = ""; // Reset for next line
-    }
+    Serial.print(c); // Print the received character to the serial monitor 
   }
-  
-
 }
-
 #endif
 
