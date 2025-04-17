@@ -10,6 +10,7 @@
 #include "tasks.h"
 
 
+void setupBLE();
 
 
 

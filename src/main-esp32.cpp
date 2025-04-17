@@ -2,6 +2,7 @@
 #include "main.h"
 #include "tasks.h"
 #include "compartments.h"
+#include "ble_logging.h"
 
 #define button_pin 8
 CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
@@ -57,7 +58,7 @@ void setup() {
 
   xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
   xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
-
+  setupBLE(); // Initialize BLE for debugging
 
 }
 String incomingLine = ""; // Buffer for storing the incoming line
@@ -65,9 +66,9 @@ String incomingLine = ""; // Buffer for storing the incoming line
 
 
 #if receiverCode
-
+String mailboxInfo = ""; // Buffer for storing the mailbox info
 void loop(){
-
+  
  while (Serial.available()) {
     char c = Serial.read();
     incomingLine += c;
@@ -76,6 +77,7 @@ void loop(){
       Serial.print("The box has received this mailbox info: ");
       Serial.println(incomingLine);  // Print the received line to the serial monitor
       incomingLine = ""; // Reset for next line
+      mailboxInfo = incomingLine; // Store the mailbox info in the global variable
     }
   }
 }
