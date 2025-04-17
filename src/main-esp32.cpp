@@ -53,12 +53,7 @@ void setup() {
   }
 
 
-
  // compartmentManager.printCompartmentInfo(); // Print compartment information
-
-  
-
-
 
   xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
   xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
