@@ -65,7 +65,7 @@ void mailbox_printer_task(void *pvParameters) {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for notification from the mailChecker task
 
     unsigned long currentTime = millis(); // Get the current time in milliseconds
-    if (currentTime - lastPrintTime < 200) { // Check if enough time has passed since the last print
+    if (currentTime - lastPrintTime < 1000) { // Check if enough time has passed since the last print
       continue; // Skip printing if not enough time has passed
     }
 
@@ -74,6 +74,7 @@ void mailbox_printer_task(void *pvParameters) {
         if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment
           Serial.print("Mail detected in compartment: ");
           Serial.println(compartmentManager->compartments[i].compartmentNumber);
+          lastPrintTime = currentTime; // Update the last print time
         }
       }
       xSemaphoreGive(compartmentMutex); // Release the mutex after printing

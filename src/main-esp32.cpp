@@ -23,9 +23,13 @@ void IRAM_ATTR buttonOneInterrupt() {
 }
 
 void printADC() {
-  int adcValue = analogRead(FINAL_INPUT); // Read the ADC value from the final input pin
-  Serial.println(adcValue); // Print the ADC value to the serial monitor
-  vTaskDelay(50/portTICK_PERIOD_MS); // Delay for 50 milliseconds
+  int adcValue = analogRead(ADC_PIN); // Read the ADC value from the final input pin
+  if(adcValue > 500){
+    Serial.println(adcValue); // Print the ADC value to the serial monitor
+    vTaskDelay(50/portTICK_PERIOD_MS); // Delay for 50 milliseconds
+
+  }
+ 
 }
 
 
@@ -33,7 +37,7 @@ void setup() {
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
-  pinMode(UNUSED_INPUT, INPUT_PULLDOWN);
+  pinMode(ADC_PIN, INPUT_PULLDOWN);
   pinMode(MULTIPLEXER_0_DISABLE, OUTPUT);
   pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
   pinMode(MULTIPLEXER_2_DISABLE, OUTPUT);
@@ -97,7 +101,7 @@ void loop() {
   while (Serial1.available()) {
     char c = Serial1.read();
     Serial.print(c); // Print the received character to the serial monitor 
-  }
+  } 
 }
 #endif
 
