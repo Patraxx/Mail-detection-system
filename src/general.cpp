@@ -22,3 +22,13 @@ void continuousTestSerial(){
   Serial.println("Test message from box-esp"); // Print a test message to the serial monitor
   vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
 }
+
+void printADC() {
+  int adcValue = analogRead(ADC_PIN); // Read the ADC value from the final input pin
+  if(adcValue > 500){
+    Serial.println(adcValue); // Print the ADC value to the serial monitor
+    vTaskDelay(50/portTICK_PERIOD_MS); // Delay for 50 milliseconds
+
+  }
+ 
+}

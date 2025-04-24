@@ -1,20 +1,12 @@
-#ifndef BLE_LOGGING_H
-#define BLE_LOGGING_H
+#ifndef BLE_SERVER_H
+#define BLE_SERVER_H
 #include <Arduino.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
-#include <BLEClient.h>
+#include <BLEServer.h>
 #include <BLEAdvertisedDevice.h>
 #include "main.h"
-#include "compartments.h"
-#include "tasks.h"
-
-
-void setupBLEclient();
-
-
-
 
 
 #endif
