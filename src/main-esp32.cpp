@@ -88,11 +88,12 @@ void loop(){
 void loop() {
 
   if (buttonOne) {
+    String CSVString = compartmentManager.csvString; // Get the CSV string from the compartment manager
     buttonOne = false;
     #if debugMode
-    sendMailBoxStatusCSV(Serial, &compartmentManager); // Print the CSV to the serial monitor when button is pressed
-    #else
-    sendMailBoxStatusCSV(Serial1, &compartmentManager); // Send mailbox status CSV when button is press
+
+    Serial.println(CSVString); // Print the CSV string to the serial monitor
+
     #endif
      // Reset the button state
   }
