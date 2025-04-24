@@ -3,6 +3,7 @@
 CompartmentManager::CompartmentManager(int numCompartments) {
     totalCompartments = numCompartments;
     compartments = new Compartment[totalCompartments];
+    csvString.reserve(100); // Reserve space for the CSV string
 }
 
 CompartmentManager::~CompartmentManager() {
@@ -21,6 +22,16 @@ void CompartmentManager::initializeCompartments() {
     }
 }
 
+void CompartmentManager::updateCSVString() {
+    csvString = ""; // Clear the previous CSV string
+    for (int i = 0; i < totalCompartments; i++) {
+        csvString += String(compartments[i].mailDetected ? "1" : "0"); // Add 1 or 0 based on mail detection
+        if (i < totalCompartments - 1) {
+            csvString += ","; // Add comma between values
+        }
+    }
+    Serial.println(csvString); // Print the CSV string to the serial monitor
+}
 
 void CompartmentManager::printCompartmentInfo(){
     for (int i = 0; i < totalCompartments; i++){

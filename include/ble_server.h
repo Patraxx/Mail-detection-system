@@ -8,5 +8,5 @@
 #include <BLEAdvertisedDevice.h>
 #include "main.h"
 
-
+void setupBLEserver();
 #endif

@@ -31,6 +31,7 @@ void scan_multiplexer(int activeMultiplexer, const int disable_mux[], int num_mu
 
     if(xSemaphoreTake(compartmentMutex, portMAX_DELAY)){ // Wait for the mutex to be available
      mailChecker(compartmentManager);
+     compartmentManager->updateCSVString(); // Update the CSV string with the current mail status
      xSemaphoreGive(compartmentMutex); // Release the mutex after accessing the compartment
     }
     compartmentManager->currentCompartmentReset(); // Reset the current compartment if it exceeds the total number of compartments

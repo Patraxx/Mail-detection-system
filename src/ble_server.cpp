@@ -17,10 +17,7 @@ class MyCharacteristicCallbacks : public BLECharacteristicCallbacks {
   }
 };
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Starting BLE Server...");
-
+void setupBLEserver() {
   // Initialize BLE
   BLEDevice::init("ESP32_Server");
 
@@ -50,9 +47,4 @@ void setup() {
   advertising->setMinPreferred(0x12);
   advertising->start();
 
-  Serial.println("BLE Server is running and advertising...");
-}
-
-void loop() {
-  // Do nothing in the loop; the server runs in the background
 }

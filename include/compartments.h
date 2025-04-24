@@ -25,6 +25,7 @@ public:
     Compartment* compartments;
     int totalCompartments;
     int currentCompartment = 1; // Current compartment being scanned // Buffer for storing the CSV string
+    String csvString; // Buffer for storing the CSV string
 
     CompartmentManager(int totalCompartments); 
     ~CompartmentManager();
@@ -32,6 +33,7 @@ public:
     void initializeCompartments();
     void printCompartmentInfo();
     void currentCompartmentReset();
+    void updateCSVString(); // Function to update the CSV string based on mail detection status
 
   
 
