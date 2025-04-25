@@ -19,7 +19,7 @@ class MyCharacteristicCallbacks : public BLECharacteristicCallbacks {
 
 void setupBLEserver() {
   // Initialize BLE
-  BLEDevice::init("ESP32_Server");
+  BLEDevice::init("MailboxServerUnit");
 
   // Create the BLE server
   BLEServer *server = BLEDevice::createServer();

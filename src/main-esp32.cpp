@@ -2,7 +2,7 @@
 #include "main.h"
 #include "tasks.h"
 #include "compartments.h"
-#include "ble_logging.h"
+#include "ble_client.h"
 #include "ble_server.h"
 
 #define button_pin 8
@@ -65,7 +65,7 @@ void setup() {
   #endif
 
  // compartmentManager.printCompartmentInfo(); // Print compartment information
-
+  xTaskCreatePinnedToCore(clientBLEtask,"MailboxTask",8192,NULL,1);
   xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
   xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
 
@@ -81,6 +81,8 @@ String incomingLine = ""; // Buffer for storing the incoming line
 
 
 void loop(){
+
+
 
 }
 #else
