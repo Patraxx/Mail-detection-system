@@ -75,9 +75,17 @@ void mailbox_printer_task(void *pvParameters) {
         if (compartmentManager->compartments[i].mailDetected) { // Check if mail is detected in the current compartment
           Serial.print("Mail detected in compartment: ");
           Serial.println(compartmentManager->compartments[i].compartmentNumber);
+          digitalWrite(greenLED, HIGH); // Turn on the green LED
+          vTaskDelay(2000 / portTICK_PERIOD_MS); // Delay for 1 second
+          digitalWrite(greenLED, LOW); // Turn off the green LED
+          
           lastPrintTime = currentTime; // Update the last print time
         }
       }
+      Serial.println();
+      Serial.println();
+      Serial.println();
+      Serial.println("------------------------------------");
       xSemaphoreGive(compartmentMutex); // Release the mutex after printing
     }
   }

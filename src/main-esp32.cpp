@@ -2,8 +2,8 @@
 #include "main.h"
 #include "tasks.h"
 #include "compartments.h"
-#include "ble_client.h"
-#include "ble_server.h"
+//#include "ble_client.h"
+//#include "ble_server.h"
 
 #define button_pin 8
 CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
@@ -35,6 +35,7 @@ void printADC() {
 
 
 void setup() {
+  pinMode(greenLED, OUTPUT); // Set the built-in LED pin as output
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
@@ -61,11 +62,11 @@ void setup() {
   #if receiverCode
   setupBLEserver(); // Setup BLE server
   #else
-  setupBLEclient(); // Setup BLE client
+  //setupBLEclient(); // Setup BLE client
   #endif
 
  // compartmentManager.printCompartmentInfo(); // Print compartment information
-  xTaskCreatePinnedToCore(clientBLEtask,"MailboxTask",8192,NULL,1);
+ // xTaskCreatePinnedToCore(clientBLEtask,"MailboxTask",8192,NULL,1);
   xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
   xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
 
@@ -89,20 +90,7 @@ void loop(){
 
 void loop() {
 
-  if (buttonOne) {
-    String CSVString = compartmentManager.csvString; // Get the CSV string from the compartment manager
-    buttonOne = false;
-    #if debugMode
 
-    Serial.println(CSVString); // Print the CSV string to the serial monitor
-
-    #endif
-     // Reset the button state
-  }
-  while (Serial1.available()) {
-    char c = Serial1.read();
-    Serial.print(c); // Print the received character to the serial monitor 
-  } 
 }
 #endif
 

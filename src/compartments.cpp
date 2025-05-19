@@ -30,7 +30,7 @@ void CompartmentManager::updateCSVString() {
             csvString += ","; // Add comma between values
         }
     }
-    Serial.println(csvString); // Print the CSV string to the serial monitor
+  //  Serial.println(csvString); // Print the CSV string to the serial monitor
 }
 
 void CompartmentManager::printCompartmentInfo(){
