@@ -1,12 +1,11 @@
 #include <Arduino.h>
 #include "main.h"
 #include "tasks.h"
-#include "compartments.h"
-//#include "ble_client.h"
-//#include "ble_server.h"
+
+
 
 #define button_pin 8
-CompartmentManager compartmentManager(NUMBER_OF_COMPARTMENTS);
+
 
 volatile unsigned long lastInterruptTime = 0; // Variable to store the last interrupt time
 
