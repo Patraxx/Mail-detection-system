@@ -24,5 +24,7 @@ extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mai
 
 extern SemaphoreHandle_t compartmentMutex;
 
+extern volatile bool mailDetected;
+
 
 #endif
