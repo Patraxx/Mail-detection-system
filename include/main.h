@@ -5,7 +5,9 @@
 #include "esp_log.h"
 #define singleMultiplexerMode 0
 #define debugMode 1
-#define receiverCode 0
+#define receiverCode 0¨
+
+#define MAC_ADRESS_WIFI_ESP "30:AE:A4:0A:1C:5E"
 
 
 
@@ -25,6 +27,7 @@ extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mai
 extern SemaphoreHandle_t compartmentMutex;
 
 extern volatile bool mailDetected;
+extern volatile bool esp_now_message_sent;
 
 
 #endif

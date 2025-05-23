@@ -38,14 +38,7 @@ void setup() {
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
-  pinMode(ADC_PIN, INPUT_PULLDOWN);
-  pinMode(MULTIPLEXER_0_DISABLE, OUTPUT);
-  pinMode(MULTIPLEXER_1_DISABLE, OUTPUT);
-  pinMode(MULTIPLEXER_2_DISABLE, OUTPUT);
-  pinMode(MULTIPLEX_A, OUTPUT);
-  pinMode(MULTIPLEX_B, OUTPUT);
-  pinMode(MULTIPLEX_C, OUTPUT);
-  compartmentManager.initializeCompartments(); // Initialize the compartments
+
 
   Serial.begin(9600);
   Serial1.begin(9600, SERIAL_8N1, 16, 17); // Initialize Serial1 with RX and TX pins
@@ -64,32 +57,13 @@ void setup() {
   //setupBLEclient(); // Setup BLE client
   #endif
 
- // compartmentManager.printCompartmentInfo(); // Print compartment information
- // xTaskCreatePinnedToCore(clientBLEtask,"MailboxTask",8192,NULL,1);
-  xTaskCreate(multiplex_looper_task, "Multiplex Task", 10000, &compartmentManager, 1, NULL);
-  xTaskCreate(mailbox_printer_task, "Mailbox Printer Task", 10000, &compartmentManager, 1, &mailboxPrinterTaskHandle); // Create the mailbox printer task    /// will only print when a change has occured
-
-
-}
-String incomingLine = ""; // Buffer for storing the incoming line
-
-
-
-#if receiverCode
-
-
-
-
-void loop(){
 
 
 
 }
-#else
-
 void loop() {
 
 
 }
-#endif
+
 
