@@ -1,11 +1,6 @@
 #include <Arduino.h>
 #include "main.h"
-typedef struct struct_message {
-    char a[32];
-    int b;
-    float c;
-    bool d;
-} struct_message;
+
 
 // Create a struct_message called myData
 struct_message myData;
@@ -23,10 +18,18 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.print("Bool: ");
   Serial.println(myData.d);
   Serial.println();
+  blinkDebugLED(); // Call the function to blink the debug LED
+}
+
+void blinkDebugLED() {
+  digitalWrite(greenLED, HIGH); // Turn on the LED
+  delay(500); // Wait for 100 milliseconds
+  digitalWrite(greenLED, LOW); // Turn off the LED
 }
 
 
 void setup(){
+    pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
 
     Serial.begin(9000);
     delay(2000); // Wait for the serial connection to be established
@@ -38,6 +41,7 @@ void setup(){
 }
 void loop(){
 
+  
 }
 
 // esp_err_t esp_now_register_recv_cb(esp_now_recv_cb_t cb);

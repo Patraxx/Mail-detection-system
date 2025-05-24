@@ -5,31 +5,34 @@
 #include "esp_log.h"
 #include "wifi.h"
 #include "esp_now.h"
-#define singleMultiplexerMode 0
+
 #define debugMode 1
 #define receiverCode 0¨
 
-#define MAC_ADRESS_ROUTER_ESP "8c:4b:14:14:73:b8"
-
+static const uint8_t MAC_ADRESS_ROUTER_ESP[6] = {0x8c, 0x4b, 0x14, 0x14, 0x73, 0xb8};
 
 
 #define FINAL_INPUT 18 //ADC
-#define ADC_PIN 4
 
 
 #define debugButton 13
 #define greenLED 19
 
-#define SERVICE_UUID_BOXSERVER        "87654321-4321-4321-4321-cba987654321"
-#define CHARACTERISTIC_UUID_DEVICE_STATUS "dcba4321-8765-4321-8765-cba987654321"
 
+void blinkDebugLED();
 
-extern TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 
 extern SemaphoreHandle_t compartmentMutex;
 
 extern volatile bool mailDetected;
 extern volatile bool esp_now_message_sent;
+
+typedef struct struct_message {
+    char a[32];
+    int b;
+    float c;
+    bool d;
+} struct_message;
 
 
 #endif

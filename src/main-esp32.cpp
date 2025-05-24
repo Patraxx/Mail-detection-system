@@ -8,6 +8,17 @@
 
 volatile unsigned long lastInterruptTime = 0; // Variable to store the last interrupt time
 
+struct_message senderData; 
+
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  if (status == ESP_NOW_SEND_SUCCESS) {
+    Serial.println("Data sent successfully");
+  } else {
+    Serial.println("Data send failed");
+  }
+}
+
+
 SemaphoreHandle_t compartmentMutex; // Declare the mutex for compartment access
 
 volatile bool buttonOne = false;
@@ -20,23 +31,15 @@ void IRAM_ATTR buttonOneInterrupt() {
   }
 }
 
-void printADC() {
-  int adcValue = analogRead(ADC_PIN); // Read the ADC value from the final input pin
-  if(adcValue > 500){
-    Serial.println(adcValue); // Print the ADC value to the serial monitor
-    vTaskDelay(50/portTICK_PERIOD_MS); // Delay for 50 milliseconds
-
-  }
- 
-}
-
-
 void setup() {
   WiFi.mode(WIFI_STA); // Set the WiFi mode to station
   uint8_t mac[6]; // Declare a byte array to hold the MAC address
   WiFi.macAddress(mac); // Get the MAC address of the ESP32
 
+  senderData.a[0] = 'H'; // Initialize the struct_message with some data
+
   esp_now_init(); // Initialize ESP-NOW
+  esp_now_register_send_cb(OnDataSent); // Register the callback function for sending data
   pinMode(greenLED, OUTPUT); // Set the built-in LED pin as output
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
@@ -53,20 +56,20 @@ void setup() {
     Serial.println("Mutex created successfully");
   }
 
-  Serial.println("Mac Address: ");
-  for (int i = 0; i < 6; i++) {
-    Serial.printf("%02X", mac[i]); // Print each byte of the MAC address in hexadecimal format
-    if (i < 5) {
-      Serial.print(":"); // Print a colon between bytes
-    }
-  }
-
 
 
 }
 void loop() {
 
+  esp_err_t result = esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&senderData, sizeof(senderData)); // Send the data using ESP-NOW
+  if (result == ESP_OK) {
+    Serial.println("Data sent successfully");
+  } else {
+    Serial.print("Error sending data: ");
+    Serial.println(result);
+  }
 
+  delay(5000); // Wait for 5 seconds before sending again
 }
 
 
