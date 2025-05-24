@@ -9,7 +9,7 @@
 #define debugMode 1
 #define receiverCode 0¨
 
-#define MAC_ADRESS_WIFI_ESP "30:AE:A4:0A:1C:5E"
+#define MAC_ADRESS_ROUTER_ESP "8c:4b:14:14:73:b8"
 
 
 
