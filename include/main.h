@@ -3,6 +3,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "esp_log.h"
+#include "wifi.h"
+#include "esp_now.h"
 #define singleMultiplexerMode 0
 #define debugMode 1
 #define receiverCode 0¨

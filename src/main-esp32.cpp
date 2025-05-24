@@ -3,7 +3,6 @@
 #include "tasks.h"
 
 
-
 #define button_pin 8
 
 
@@ -11,7 +10,6 @@ volatile unsigned long lastInterruptTime = 0; // Variable to store the last inte
 
 SemaphoreHandle_t compartmentMutex; // Declare the mutex for compartment access
 
-TaskHandle_t mailboxPrinterTaskHandle; // Declare the task handle for mailbox printer task
 volatile bool buttonOne = false;
 
 void IRAM_ATTR buttonOneInterrupt() {
@@ -34,6 +32,11 @@ void printADC() {
 
 
 void setup() {
+  WiFi.mode(WIFI_STA); // Set the WiFi mode to station
+  uint8_t mac[6]; // Declare a byte array to hold the MAC address
+  WiFi.macAddress(mac); // Get the MAC address of the ESP32
+
+  esp_now_init(); // Initialize ESP-NOW
   pinMode(greenLED, OUTPUT); // Set the built-in LED pin as output
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
@@ -41,8 +44,7 @@ void setup() {
 
 
   Serial.begin(9600);
-  Serial1.begin(9600, SERIAL_8N1, 16, 17); // Initialize Serial1 with RX and TX pins
-  delay(1000);
+
 
   compartmentMutex = xSemaphoreCreateMutex(); // Create a mutex for compartment access
   if (compartmentMutex == NULL) {
@@ -51,12 +53,13 @@ void setup() {
     Serial.println("Mutex created successfully");
   }
 
-  #if receiverCode
-  setupBLEserver(); // Setup BLE server
-  #else
-  //setupBLEclient(); // Setup BLE client
-  #endif
-
+  Serial.println("Mac Address: ");
+  for (int i = 0; i < 6; i++) {
+    Serial.printf("%02X", mac[i]); // Print each byte of the MAC address in hexadecimal format
+    if (i < 5) {
+      Serial.print(":"); // Print a colon between bytes
+    }
+  }
 
 
 
