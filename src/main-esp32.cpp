@@ -38,7 +38,12 @@ void setup() {
 
   senderData.a[0] = 'H'; // Initialize the struct_message with some data
 
-  esp_now_init(); // Initialize ESP-NOW
+  esp_err_t err = esp_now_init(); // Initialize ESP-NOW
+  if (err != ESP_OK) {
+    Serial.println("ESP-NOW initialization failed");
+    return; // Exit setup if initialization fails
+  }
+
   esp_now_register_send_cb(OnDataSent); // Register the callback function for sending data
   pinMode(greenLED, OUTPUT); // Set the built-in LED pin as output
   pinMode(debugButton, INPUT_PULLUP); // Set the debug button pin as input with pull-up resistor
@@ -54,22 +59,21 @@ void setup() {
     Serial.println("Failed to create mutex");
   } else {
     Serial.println("Mutex created successfully");
-  }
+  } 
+  esp_now_peer_info_t peerInfo = {};
+  memcpy(peerInfo.peer_addr, MAC_ADRESS_ROUTER_ESP, sizeof(MAC_ADRESS_ROUTER_ESP)); // Copy the MAC address of the peer device
+  peerInfo.channel = 0; // Set the channel to 0 to use the current channel
+  peerInfo.encrypt = false; // Set encryption to false
+
+ esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
 
 
 
 }
 void loop() {
 
-  esp_err_t result = esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&senderData, sizeof(senderData)); // Send the data using ESP-NOW
-  if (result == ESP_OK) {
-    Serial.println("Data sent successfully");
-  } else {
-    Serial.print("Error sending data: ");
-    Serial.println(result);
-  }
+//  esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&senderData, sizeof(senderData)); // Send the data using ESP-NOW
 
-  delay(5000); // Wait for 5 seconds before sending again
 }
 
 

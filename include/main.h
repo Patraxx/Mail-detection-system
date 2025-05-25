@@ -7,9 +7,11 @@
 #include "esp_now.h"
 
 #define debugMode 1
-#define receiverCode 0¨
+#define receiverCode 0
 
 static const uint8_t MAC_ADRESS_ROUTER_ESP[6] = {0x8c, 0x4b, 0x14, 0x14, 0x73, 0xb8};
+
+#define sender_mac_address "8c:4b:14:15:b3:64"
 
 
 #define FINAL_INPUT 18 //ADC

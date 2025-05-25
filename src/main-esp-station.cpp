@@ -29,13 +29,12 @@ void blinkDebugLED() {
 
 
 void setup(){
-    pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
 
-    Serial.begin(9000);
+    pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
+    Serial.begin(9600);
     delay(2000); // Wait for the serial connection to be established
     WiFi.mode(WIFI_STA); // Set the WiFi mode to station
     esp_now_init(); // Initialize ESP-NOW
-
     esp_now_register_recv_cb(OnDataRecv); // Register the callback function for receiving data
 
     Serial.println(WiFi.macAddress()); // Print the MAC address of the ESP32
