@@ -37,6 +37,8 @@ void setup(){
     esp_now_init(); // Initialize ESP-NOW
 
     esp_now_register_recv_cb(OnDataRecv); // Register the callback function for receiving data
+
+    Serial.println(WiFi.macAddress()); // Print the MAC address of the ESP32
     
 }
 void loop(){
