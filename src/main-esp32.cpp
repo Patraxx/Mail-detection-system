@@ -3,8 +3,9 @@
 #include "tasks.h"
 
 
-#define button_pin 8
 
+TaskHandle_t letterDetectionTaskHandle;
+TaskHandle_t espNowTaskHandle;
 
 volatile unsigned long lastInterruptTime = 0; // Variable to store the last interrupt time
 
@@ -36,7 +37,7 @@ void setup() {
   uint8_t mac[6]; // Declare a byte array to hold the MAC address
   WiFi.macAddress(mac); // Get the MAC address of the ESP32
 
-  senderData.a[0] = 'H'; // Initialize the struct_message with some data
+  senderData = {0}; // Initialize the senderData struct
 
   esp_err_t err = esp_now_init(); // Initialize ESP-NOW
   if (err != ESP_OK) {
@@ -67,7 +68,8 @@ void setup() {
 
  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
 
-
+ xTaskCreate(letter_detection_task, "Letter Detection Task", 2048, NULL, 1, NULL); // Create the letter detection task
+ xTaskCreate(esp_now_task, "ESP-NOW Task", 2048, NULL, 1, NULL); // Create the ESP-NOW task
 
 }
 void loop() {

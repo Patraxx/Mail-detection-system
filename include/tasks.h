@@ -5,6 +5,6 @@
 
 
 void letter_detection_task(void *pvParameters);
-
+void esp_now_task(void *pvParameters);
 
 #endif // 

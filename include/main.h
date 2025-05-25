@@ -17,14 +17,19 @@ static const uint8_t MAC_ADRESS_ROUTER_ESP[6] = {0x8c, 0x4b, 0x14, 0x14, 0x73, 0
 #define FINAL_INPUT 18 //ADC
 
 
-#define debugButton 13
+#define debugButton 14
 #define greenLED 19
+
+#define detectionTime 2000
 
 
 void blinkDebugLED();
 
 
 extern SemaphoreHandle_t compartmentMutex;
+
+extern TaskHandle_t letterDetectionTaskHandle;
+extern TaskHandle_t espNowTaskHandle;
 
 extern volatile bool mailDetected;
 extern volatile bool esp_now_message_sent;
