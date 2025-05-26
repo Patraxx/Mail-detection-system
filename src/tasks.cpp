@@ -24,8 +24,11 @@ void letter_detection_task(void *pvParameters) {
     } else {
 
       highStartTime = 0; // Reset the high start time if the pin goes LOW
+      
+      if(mailDetected) {
+        xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected
+      }
       mailDetected = false;
-      xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected
       vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 100 milliseconds
     }
     vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 10 milliseconds

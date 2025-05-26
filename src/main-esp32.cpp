@@ -69,7 +69,7 @@ void setup() {
  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
 
  xTaskCreate(letter_detection_task, "Letter Detection Task", 2048, NULL, 1, NULL); // Create the letter detection task
- xTaskCreate(esp_now_task, "ESP-NOW Task", 2048, NULL, 1, NULL); // Create the ESP-NOW task
+ xTaskCreate(esp_now_task, "ESP-NOW Task", 2048, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
 
 }
 void loop() {
