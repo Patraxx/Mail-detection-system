@@ -41,5 +41,9 @@ typedef struct struct_message {
     bool d;
 } struct_message;
 
+typedef struct ESP_MAIL_BOOL {
+    bool mailDetected;
+} ESP_MAIL_BOOL;
+
 
 #endif

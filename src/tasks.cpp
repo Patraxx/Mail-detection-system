@@ -19,15 +19,16 @@ void letter_detection_task(void *pvParameters) {
       if(millis() - highStartTime >= detectionTime && !mailDetected){
         Serial.println("Mail detected, notifying espNOW");
         mailDetected = true; // Set the mail detected flag to true
+        xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task
       }   
     } else {
 
       highStartTime = 0; // Reset the high start time if the pin goes LOW
       mailDetected = false;
-      Serial.println("No mail detected, resetting flag");
-      vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for 100 milliseconds
+      xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected
+      vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 100 milliseconds
     }
-    vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for 10 milliseconds
+    vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 10 milliseconds
   }
    vTaskDelete(NULL); // Delete the task when done
 }
@@ -35,13 +36,18 @@ void letter_detection_task(void *pvParameters) {
 void esp_now_task(void *pvParameters) {  
 
   while (true) {
+
+    xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
+
     if (mailDetected) {
-      // Send notification to ESP-NOW
-      mailData.a[0] = 'M'; // Set the first character to 'M' to indicate mail detected
       Serial.println("Sending notification to ESP-NOW");
-      esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailData, sizeof(mailData));    
+      esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData));    
     }
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
+    else {
+      Serial.println("No mail detected, sending notification");
+      esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData)); // Send notification to ESP-NOW
+    }
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Delay for 1 second
   }
   vTaskDelete(NULL); // Delete the task when done
 }
