@@ -5,20 +5,39 @@
 // Create a struct_message called myData
 struct_message myData;
 
+
+/*
+
+#define PUSHBULLET_TOKEN "YOUR_ACCESS_TOKEN"
+#define PUSHBULLET_URL "https://api.pushbullet.com/v2/pushes"
+
+const char *post_data = "{\"type\": \"note\", \"title\": \"Mailbox\", \"body\": \"You've got mail!\"}";
+
+esp_http_client_config_t config = {
+    .url = PUSHBULLET_URL,
+};
+esp_http_client_handle_t client = esp_http_client_init(&config);
+
+esp_http_client_set_method(client, HTTP_METHOD_POST);
+esp_http_client_set_header(client, "Access-Token", PUSHBULLET_TOKEN);
+esp_http_client_set_header(client, "Content-Type", "application/json");
+esp_http_client_set_post_field(client, post_data, strlen(post_data));
+
+esp_http_client_perform(client);
+esp_http_client_cleanup(client);
+
+
+*/
+
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
-  memcpy(&myData, incomingData, sizeof(myData));
-  Serial.print("Bytes received: ");
-  Serial.println(len);
-  Serial.print("Char: ");
-  Serial.println(myData.a);
-  Serial.print("Int: ");
-  Serial.println(myData.b);
-  Serial.print("Float: ");
-  Serial.println(myData.c);
-  Serial.print("Bool: ");
-  Serial.println(myData.d);
-  Serial.println();
-  blinkDebugLED(); // Call the function to blink the debug LED
+ mailDetected = incomingData[0]; // Assuming the first byte indicates mail detection
+ if (mailDetected) {
+   Serial.println("Mail detected!");
+   digitalWrite(greenLED, HIGH); // Turn on the LED to indicate mail detection
+ } else {
+   Serial.println("No mail detected.");
+   digitalWrite(greenLED, LOW); // Turn off the LED
+ }
 }
 
 void blinkDebugLED() {
