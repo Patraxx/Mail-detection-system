@@ -36,7 +36,10 @@ void IRAM_ATTR buttonOneInterrupt() {
 
 void setup() {
   WiFi.mode(WIFI_STA); // Set the WiFi mode to station
+  esp_wifi_set_channel(5, WIFI_SECOND_CHAN_NONE); // Set the WiFi channel to 5
+
   uint8_t mac[6]; // Declare a byte array to hold the MAC address
+ 
   WiFi.macAddress(mac); // Get the MAC address of the ESP32
 
   senderData = {0}; // Initialize the senderData struct
@@ -65,7 +68,7 @@ void setup() {
   } 
   esp_now_peer_info_t peerInfo = {};
   memcpy(peerInfo.peer_addr, MAC_ADRESS_ROUTER_ESP, sizeof(MAC_ADRESS_ROUTER_ESP)); // Copy the MAC address of the peer device
-  peerInfo.channel = 0; // Set the channel to 0 to use the current channel
+  peerInfo.channel = 5; // Set the channel to 0 to use the current channel
   peerInfo.encrypt = false; // Set encryption to false
 
  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list

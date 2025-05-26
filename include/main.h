@@ -5,6 +5,7 @@
 #include "esp_log.h"
 #include "wifi.h"
 #include "esp_now.h"
+#include "esp_wifi.h"
 
 #define hemma_sssid "Cedelerium"
 #define hemma_password "kaffemongo"
@@ -32,6 +33,7 @@ extern SemaphoreHandle_t compartmentMutex;
 
 extern TaskHandle_t letterDetectionTaskHandle;
 extern TaskHandle_t espNowTaskHandle;
+extern TaskHandle_t httpPostTaskHandle;
 
 extern volatile bool mailDetected;
 extern volatile bool esp_now_message_sent;
