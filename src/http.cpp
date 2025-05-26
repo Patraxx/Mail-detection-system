@@ -1,6 +1,6 @@
 #include "http.h"
 
-#define PUSHBULLET_TOKEN "YOUR_ACCESS_TOKEN"
+#define PUSHBULLET_TOKEN "o.Wzp43tQ6iZDGsHBdJkfQRnI1QOhTTQZU"
 #define PUSHBULLET_URL "https://api.pushbullet.com/v2/pushes"
 
 
@@ -26,5 +26,15 @@ void http_post(){
 esp_http_client_perform(client);
 esp_http_client_cleanup(client);
 
+}
+
+void wifi_setup() {
+    WiFi.mode(WIFI_STA); // Set the WiFi mode to station
+    WiFi.begin(hemma_sssid, hemma_password); // Connect to the WiFi network
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(1000); // Wait for connection
+        Serial.println("Connecting to WiFi...");
+    }
+    Serial.println("Connected to WiFi");
 }
 

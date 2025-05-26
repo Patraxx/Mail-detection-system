@@ -10,6 +10,8 @@
 void http_setup();
 void http_post();
 
+void wifi_setup();
+
 
 
 #endif

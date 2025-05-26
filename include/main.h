@@ -6,6 +6,8 @@
 #include "wifi.h"
 #include "esp_now.h"
 
+#define hemma_sssid "Cedelerium"
+#define hemma_password "kaffemongo"
 #define debugMode 1
 #define receiverCode 0
 

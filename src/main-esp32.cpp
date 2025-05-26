@@ -4,6 +4,8 @@
 
 
 
+
+
 TaskHandle_t letterDetectionTaskHandle;
 TaskHandle_t espNowTaskHandle;
 
