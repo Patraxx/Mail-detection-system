@@ -46,7 +46,7 @@ void wifi_setup() {
 
 void http_post_task(void *pvParameters) {
     while (true) {
-
+        // kolla om det blockar
         xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
         if (mailDetected) {
             Serial.println("Sending HTTP POST request for mail detection");
