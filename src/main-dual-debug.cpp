@@ -46,7 +46,13 @@ void setup(){
         delay(1000); // Wait for connection
         Serial.println("Connecting to WiFi...");
     }
-
+    esp_err_t err = esp_now_init(); // Initialize ESP-NOW
+    if (err != ESP_OK) {
+        Serial.println("ESP-NOW initialization failed");
+        return; // Exit setup if initialization fails
+    }
+    esp_now_register_recv_cb(onDataReceived); // Register the callback function for receiving data
+    
 
 }
 void loop(){
@@ -58,7 +64,7 @@ void loop(){
 #else
 void setup(){
     WiFi.mode(WIFI_STA); // Set the WiFi mode to station
-    
+
     
     esp_wifi_set_channel(5, WIFI_SECOND_CHAN_NONE); // Set the WiFi channel to 5
 

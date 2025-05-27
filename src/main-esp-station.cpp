@@ -32,10 +32,11 @@ void setup(){
     wifi_setup(); // Initialize WiFi connection
     pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
 
-    if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
-    return;
-      }
+    esp_err_t err = esp_now_init(); // Initialize ESP-NOW
+    if (err != ESP_OK) {
+        Serial.println("ESP-NOW initialization failed");
+        return; // Exit setup if initialization fails
+    }
     Serial.println("ESP-NOW Initialized");
     esp_now_register_recv_cb(OnDataRecv); // Register the callback function for receiving data
     xTaskCreate(http_post_task, "HTTP Post Task", 16400, NULL, 1, &httpPostTaskHandle); // Create the HTTP post task 
