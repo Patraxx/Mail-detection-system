@@ -19,8 +19,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   } else {
     Serial.println("Data send failed");
   }
-
-  Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
+ // Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
 }
 
 
@@ -73,14 +72,14 @@ void setup() {
   peerInfo.encrypt = false; // Set encryption to false
 
  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
-
+  
  xTaskCreate(letter_detection_task, "Letter Detection Task", 2048, NULL, 1, NULL); // Create the letter detection task
- xTaskCreate(esp_now_task, "ESP-NOW Task", 2048, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
+ xTaskCreate(esp_now_task, "ESP-NOW Task", 4086, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
 
 }
 void loop() {
 
-
+vTaskDelay(1);
 
 }
 

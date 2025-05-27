@@ -22,7 +22,7 @@ void letter_detection_task(void *pvParameters) {
         xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task
       }   
     } else {
-      
+
       if (mailDetected && digitalRead(FINAL_INPUT) == LOW) {
         highStartTime = 0; // Reset the high start time if the pin goes LOW 
         xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected    
@@ -43,12 +43,24 @@ void esp_now_task(void *pvParameters) {
 
     if (mailDetected) {
       Serial.println("Sending notification to ESP-NOW");
-      esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData));    
+
+     esp_err_t err = esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData));  
+       if (err == ESP_OK) {
+          Serial.println("ESP-NOW message sent successfully");
+        } else {
+          Serial.println("Error sending ESP-NOW message: " + String(err));
+        }
     }
     else {
-      Serial.println("No mail detected, sending notification");
-      esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData)); // Send notification to ESP-NOW
+      Serial.println("No mail detected, sending notification");  
+      esp_err_t err = esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData)); // Send notification to ESP-NOW
+       if (err == ESP_OK) {
+          Serial.println("ESP-NOW message sent successfully");
+        } else {
+          Serial.println("Error sending ESP-NOW message: " + String(err));
+        }
     }
+    vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for 1 second before checking again
   }
   vTaskDelete(NULL); // Delete the task when done
 }

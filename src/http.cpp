@@ -4,38 +4,28 @@
 #define PUSHBULLET_URL "https://api.pushbullet.com/v2/pushes"
 #include "esp_crt_bundle.h"
 #include <WiFiClientSecure.h>
+#include "esp_log.h"
+
+
+#define TAG "HTTP"
 
 
 
+void http_post() {
 
-
-
-void http_post(){
-    WiFiClientSecure  client;
+    WiFiClientSecure client;
     client.setInsecure(); // Disable SSL certificate verification for testing purposes
-
     HTTPClient http;
-
-    http.begin(client,"https://api.pushbullet.com/v2/pushes");
+    http.begin(client, "https://api.pushbullet.com/v2/pushes");
     http.addHeader("Access-Token", PUSHBULLET_TOKEN);
     http.addHeader("Content-Type", "application/json");
-
     const char *postData = "{\"type\": \"note\", \"title\": \"Mailbox\", \"body\": \"You've got mail!\"}";
-
-    int httpResponseCode = http.POST(postData);
-
-    if (httpResponseCode > 0) {
-        String response = http.getString(); // Get the response from the server
-        Serial.println("HTTP Response code: " + String(httpResponseCode));
-        Serial.println("Response: " + response);
-    } else {
-        Serial.println("Error in HTTP request: " + String(httpResponseCode));
-    }
+    http.POST(postData);
     http.end(); // Close the connection
-     // Print the current WiFi channel
 }
 
 void wifi_setup() {
+    esp_log_level_set(TAG, ESP_LOG_INFO); // Set the log level for this tag
     WiFi.mode(WIFI_STA); // Set the WiFi mode to station
     WiFi.begin(hemma_sssid, hemma_password); // Connect to the WiFi network
     while (WiFi.status() != WL_CONNECTED) {
@@ -52,8 +42,8 @@ void http_post_task(void *pvParameters) {
 
         Serial.printf("Free stack before post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
         if (mailDetected) {
-            Serial.println("Sending HTTP POST request for mail detection");
-          //  http_post(); // Call the function to perform the HTTP POST request
+           
+            http_post(); // Call the function to perform the HTTP POST request
 
             Serial.printf("Free stack after post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
         } else {
