@@ -13,19 +13,11 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
  if (mailDetected) {
    Serial.println("Mail detected!");
    digitalWrite(greenLED, HIGH); // Turn on the LED to indicate mail detection
-   xTaskNotifyGive(httpPostTaskHandle); // Notify the HTTP post task to send a notification
+//   xTaskNotifyGive(httpPostTaskHandle); // Notify the HTTP post task to send a notification
  } else {
-   Serial.println("No mail detected.");
    digitalWrite(greenLED, LOW); // Turn off the LED
  }
 }
-
-void blinkDebugLED() {
-  digitalWrite(greenLED, HIGH); // Turn on the LED
-  delay(500); // Wait for 100 milliseconds
-  digitalWrite(greenLED, LOW); // Turn off the LED
-}
-
 
 void setup(){
 
@@ -38,13 +30,14 @@ void setup(){
 
     esp_now_init(); // Initialize ESP-NOW
     esp_now_register_recv_cb(OnDataRecv); // Register the callback function for receiving data
-     xTaskCreate(http_post_task, "HTTP Post Task", 4096, NULL, 1, &httpPostTaskHandle); // Create the HTTP post task 
+    xTaskCreate(http_post_task, "HTTP Post Task", 4096, NULL, 1, &httpPostTaskHandle); // Create the HTTP post task 
 
     Serial.println(WiFi.macAddress()); // Print the MAC address of the ESP32
     
 }
 void loop(){
-
-
-
+  vTaskDelay(5000 / portTICK_PERIOD_MS); // Delay for 1 second
+  Serial.println("Router WiFi channel: " + String(WiFi.channel()));
+  Serial.println();
+  Serial.println();
 }

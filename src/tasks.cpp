@@ -22,14 +22,13 @@ void letter_detection_task(void *pvParameters) {
         xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task
       }   
     } else {
-
-      highStartTime = 0; // Reset the high start time if the pin goes LOW
       
-      if(mailDetected) {
-        xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected
+      if (mailDetected && digitalRead(FINAL_INPUT) == LOW) {
+        highStartTime = 0; // Reset the high start time if the pin goes LOW 
+        xTaskNotifyGive(espNowTaskHandle); // Notify the ESP-NOW task that no mail is detected    
+        mailDetected = false;
+        Serial.println("Mail no longer detected, resetting flag");
       }
-      mailDetected = false;
-      vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 100 milliseconds
     }
     vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 10 milliseconds
   }
@@ -50,7 +49,6 @@ void esp_now_task(void *pvParameters) {
       Serial.println("No mail detected, sending notification");
       esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&mailDetected, sizeof(mailData)); // Send notification to ESP-NOW
     }
-    vTaskDelay(50 / portTICK_PERIOD_MS); // Delay for 1 second
   }
   vTaskDelete(NULL); // Delete the task when done
 }

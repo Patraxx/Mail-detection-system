@@ -13,10 +13,10 @@
 void http_post(){
     WiFiClientSecure  client;
     client.setInsecure(); // Disable SSL certificate verification for testing purposes
+
     HTTPClient http;
 
-    http.begin("https://api.pushbullet.com/v2/pushes");
-
+    http.begin(client,"https://api.pushbullet.com/v2/pushes");
     http.addHeader("Access-Token", PUSHBULLET_TOKEN);
     http.addHeader("Content-Type", "application/json");
 
@@ -32,6 +32,7 @@ void http_post(){
         Serial.println("Error in HTTP request: " + String(httpResponseCode));
     }
     http.end(); // Close the connection
+     // Print the current WiFi channel
 }
 
 void wifi_setup() {
@@ -48,9 +49,13 @@ void http_post_task(void *pvParameters) {
     while (true) {
         // kolla om det blockar
         xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
+
+        Serial.printf("Free stack before post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
         if (mailDetected) {
             Serial.println("Sending HTTP POST request for mail detection");
-            http_post(); // Call the function to perform the HTTP POST request
+          //  http_post(); // Call the function to perform the HTTP POST request
+
+            Serial.printf("Free stack after post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
         } else {
             Serial.println("No mail detected, skipping HTTP POST request");
         }

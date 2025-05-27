@@ -19,6 +19,8 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   } else {
     Serial.println("Data send failed");
   }
+
+  Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
 }
 
 
@@ -68,7 +70,6 @@ void setup() {
   } 
   esp_now_peer_info_t peerInfo = {};
   memcpy(peerInfo.peer_addr, MAC_ADRESS_ROUTER_ESP, sizeof(MAC_ADRESS_ROUTER_ESP)); // Copy the MAC address of the peer device
-  peerInfo.channel = 5; // Set the channel to 0 to use the current channel
   peerInfo.encrypt = false; // Set encryption to false
 
  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
@@ -79,7 +80,7 @@ void setup() {
 }
 void loop() {
 
-//  esp_now_send(MAC_ADRESS_ROUTER_ESP, (uint8_t *)&senderData, sizeof(senderData)); // Send the data using ESP-NOW
+
 
 }
 
