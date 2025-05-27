@@ -25,7 +25,6 @@ void http_post() {
 }
 
 void wifi_setup() {
-    esp_log_level_set(TAG, ESP_LOG_INFO); // Set the log level for this tag
     WiFi.mode(WIFI_STA); // Set the WiFi mode to station
     WiFi.begin(hemma_sssid, hemma_password); // Connect to the WiFi network
     while (WiFi.status() != WL_CONNECTED) {
@@ -40,12 +39,9 @@ void http_post_task(void *pvParameters) {
         // kolla om det blockar
         xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
 
-        Serial.printf("Free stack before post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
-        if (mailDetected) {
-           
+        if (mailDetected) {        
             http_post(); // Call the function to perform the HTTP POST request
 
-            Serial.printf("Free stack after post: %d bytes\n", uxTaskGetStackHighWaterMark(NULL) * 4);
         } else {
             Serial.println("No mail detected, skipping HTTP POST request");
         }

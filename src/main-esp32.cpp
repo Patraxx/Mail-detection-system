@@ -11,15 +11,15 @@ TaskHandle_t espNowTaskHandle;
 
 volatile unsigned long lastInterruptTime = 0; // Variable to store the last interrupt time
 
-struct_message senderData; 
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+               
   if (status == ESP_NOW_SEND_SUCCESS) {
     Serial.println("Data sent successfully");
   } else {
     Serial.println("Data send failed");
   }
- // Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
+  Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
 }
 
 
@@ -43,7 +43,7 @@ void setup() {
  
   WiFi.macAddress(mac); // Get the MAC address of the ESP32
 
-  senderData = {0}; // Initialize the senderData struct
+
 
   esp_err_t err = esp_now_init(); // Initialize ESP-NOW
   if (err != ESP_OK) {
@@ -70,17 +70,20 @@ void setup() {
   esp_now_peer_info_t peerInfo = {};
   memcpy(peerInfo.peer_addr, MAC_ADRESS_ROUTER_ESP, sizeof(MAC_ADRESS_ROUTER_ESP)); // Copy the MAC address of the peer device
   peerInfo.encrypt = false; // Set encryption to false
+  esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
+  vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to allow the peer to be added
 
- esp_now_add_peer(&peerInfo); // Add the peer device to the ESP-NOW peer list
-  
  xTaskCreate(letter_detection_task, "Letter Detection Task", 2048, NULL, 1, NULL); // Create the letter detection task
- xTaskCreate(esp_now_task, "ESP-NOW Task", 4086, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
+ //xTaskCreate(esp_now_task, "ESP-NOW Task", 4086, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
 
 }
 void loop() {
-
-vTaskDelay(1);
-
+uint8_t dummyData = 1;
+esp_now_send(MAC_ADRESS_ROUTER_ESP, &dummyData, sizeof(dummyData));
+vTaskDelay(5000);
+dummyData = 0;
+esp_now_send(MAC_ADRESS_ROUTER_ESP, &dummyData, sizeof(dummyData));
+vTaskDelay(5000);
 }
 
 
