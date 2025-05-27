@@ -26,11 +26,11 @@ void onDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     }
 }
 void onDataReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
-    Serial.print("Data received: ");
-    for (int i = 0; i < data_len; i++) {
-        Serial.print(data[i], HEX);
-        Serial.print(" ");
-    }
+   Serial.print(" | Data: ");
+  for (int i = 0; i < data_len; i++) {
+    Serial.printf("%02X ", data[i]);
+  }
+  Serial.println()
 }   
 
 #if receiverESP
@@ -57,9 +57,6 @@ void setup(){
 }
 void loop(){
     
-
-
-
 }
 #else
 void setup(){
