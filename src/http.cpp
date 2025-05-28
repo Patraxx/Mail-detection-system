@@ -49,3 +49,14 @@ void http_post_task(void *pvParameters) {
     vTaskDelete(NULL); // Delete the task when done
 }
 
+void wifi_connection_task(void *pvParameters) {
+    while (true) {
+
+
+        
+       
+       
+    }
+    vTaskDelete(NULL); // Delete the task when done
+}
+

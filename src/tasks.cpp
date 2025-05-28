@@ -2,6 +2,8 @@
 #include "main.h"
 volatile bool mailDetected = false; // Flag to indicate if mail is detected
 
+TaskHandle_t blinkLEDTaskHandle; // Task handle for the LED blinking task
+
 
 
 void letter_detection_task(void *pvParameters) {
@@ -50,6 +52,16 @@ void esp_now_task(void *pvParameters) {
      
     }
     vTaskDelay(10 / portTICK_PERIOD_MS); // Delay for 1 second before checking again
+  }
+  vTaskDelete(NULL); // Delete the task when done
+}
+
+void blink_led_task(void *pvParameters) {
+  while (true) {
+    xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
+    digitalWrite(greenLED, HIGH); // Turn on the LED
+    vTaskDelay(100 / portTICK_PERIOD_MS); // Wait for 500 milliseconds
+    digitalWrite(greenLED, LOW); // Turn off the LED
   }
   vTaskDelete(NULL); // Delete the task when done
 }

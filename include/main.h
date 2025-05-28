@@ -36,6 +36,7 @@ extern SemaphoreHandle_t compartmentMutex;
 extern TaskHandle_t letterDetectionTaskHandle;
 extern TaskHandle_t espNowTaskHandle;
 extern TaskHandle_t httpPostTaskHandle;
+extern TaskHandle_t blinkLEDTaskHandle;
 
 extern volatile bool mailDetected;
 extern volatile bool esp_now_message_sent;
