@@ -9,6 +9,8 @@
 
 #define TAG "HTTP"
 
+TaskHandle_t wifiConnectionTaskHandle;
+
 
 
 void http_post() {
@@ -37,14 +39,16 @@ void wifi_setup() {
 void http_post_task(void *pvParameters) {
     while (true) {
         // kolla om det blockar
+
         xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
 
-        if (mailDetected) {        
+   
             http_post(); // Call the function to perform the HTTP POST request
 
-        } else {
-            Serial.println("No mail detected, skipping HTTP POST request");
-        }
+        xTaskNotify(wifiConnectionTaskHandle, WIFI_DISCONNECT_BIT, eSetBits); // Notify the WiFi connection task to reconnect if needed
+
+
+     
     }
     vTaskDelete(NULL); // Delete the task when done
 }
@@ -52,12 +56,12 @@ void http_post_task(void *pvParameters) {
 void wifi_connection_task(void *pvParameters) {
     uint32_t ulNotificationValue;
     while (true) {
-        xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY);
+        xTaskNotifyWait(0, WIFI_CONNECT_BIT | WIFI_DISCONNECT_BIT, &ulNotificationValue, portMAX_DELAY);
 
         if (ulNotificationValue & WIFI_CONNECT_BIT) {
             WiFi.begin(hemma_sssid, hemma_password);
             while (WiFi.status() != WL_CONNECTED) {
-                delay(300);
+                vTaskDelay(300 / portTICK_PERIOD_MS);
                 Serial.println("Connecting to WiFi...");
             }
             xTaskNotifyGive(httpPostTaskHandle);
@@ -66,7 +70,7 @@ void wifi_connection_task(void *pvParameters) {
         if (ulNotificationValue & WIFI_DISCONNECT_BIT) {
             WiFi.disconnect(true);
             while (WiFi.status() == WL_CONNECTED) {
-                delay(300);
+               vTaskDelay(300 / portTICK_PERIOD_MS);
                 Serial.println("Disconnecting from WiFi...");
             }
             esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
