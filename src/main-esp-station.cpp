@@ -13,19 +13,18 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
  mailDetected = incomingData[0]; // Assuming the first byte indicates mail detection
  if (mailDetected) {
-   Serial.println("Mail is: " + String(mailDetected)+" , mail detected, turning on LED"); 
    digitalWrite(greenLED, HIGH); // Turn on the LED to indicate mail detection
-    xTaskNotifyGive(httpPostTaskHandle); // Notify the HTTP post task to send a notification
+   // xTaskNotifyGive(httpPostTaskHandle); // Notify the HTTP post task to send a notification
  } else {
-    Serial.println("Mail is: " + String(mailDetected)+" , no mail detected, turning off LED"); 
+ 
    digitalWrite(greenLED, LOW); // Turn off the LED
  }
-  Serial.print("Bool is : " + String(mailDetected));
+
 }
 
 void setup(){
 
-    Serial.begin(9600);
+    Serial.begin(11500); // Initialize serial communication at 115200 baud rate
     while(!Serial); // Wait for the serial connection to be established
 
    
@@ -44,7 +43,6 @@ void setup(){
     xTaskCreate(blink_led_task, "Blink LED Task", 2048, NULL, 1, &blinkLEDTaskHandle); // Create the blink LED task
     xTaskCreate(wifi_connection_task, "WiFi Connection Task", 2048, NULL, 1, &wifiConnectionTaskHandle); // Create the WiFi connection task
 
-    Serial.println(WiFi.macAddress()); // Print the MAC address of the ESP32
    
 }
 void loop() {

@@ -19,7 +19,6 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   } else {
     Serial.println("Data send failed");
   }
-  Serial.println("Current WiFi channel for sender: " + String(WiFi.channel()));
 }
 
 
@@ -58,7 +57,8 @@ void setup() {
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
 
 
-  Serial.begin(9600);
+  Serial.begin(115200); // Initialize serial communication at 115200 baud rate
+  while (!Serial); // Wait for the serial connection to be established
 
 
   compartmentMutex = xSemaphoreCreateMutex(); // Create a mutex for compartment access
@@ -74,16 +74,11 @@ void setup() {
   vTaskDelay(200 / portTICK_PERIOD_MS); // Delay for 1 second to allow the peer to be added
 
  xTaskCreate(letter_detection_task, "Letter Detection Task", 2048, NULL, 1, NULL); // Create the letter detection task
- //xTaskCreate(esp_now_task, "ESP-NOW Task", 4086, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
+  xTaskCreate(esp_now_task, "ESP-NOW Task", 4086, NULL, 1, &espNowTaskHandle); // Create the ESP-NOW task
 
 }
 void loop() {
-uint8_t dummyData = 1;
-esp_now_send(MAC_ADRESS_ROUTER_ESP, &dummyData, sizeof(dummyData));
-vTaskDelay(5000);
-dummyData = 0;
-esp_now_send(MAC_ADRESS_ROUTER_ESP, &dummyData, sizeof(dummyData));
-vTaskDelay(5000);
+
 }
 
 
