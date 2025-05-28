@@ -50,13 +50,27 @@ void http_post_task(void *pvParameters) {
 }
 
 void wifi_connection_task(void *pvParameters) {
+    uint32_t ulNotificationValue;
     while (true) {
+        xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY);
 
+        if (ulNotificationValue & WIFI_CONNECT_BIT) {
+            WiFi.begin(hemma_sssid, hemma_password);
+            while (WiFi.status() != WL_CONNECTED) {
+                delay(300);
+                Serial.println("Connecting to WiFi...");
+            }
+            xTaskNotifyGive(httpPostTaskHandle);
+        }
 
-        
-       
-       
+        if (ulNotificationValue & WIFI_DISCONNECT_BIT) {
+            WiFi.disconnect(true);
+            while (WiFi.status() == WL_CONNECTED) {
+                delay(300);
+                Serial.println("Disconnecting from WiFi...");
+            }
+            esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
+        }
     }
-    vTaskDelete(NULL); // Delete the task when done
+    vTaskDelete(NULL);
 }
-

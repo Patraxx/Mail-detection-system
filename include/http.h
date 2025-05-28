@@ -13,6 +13,7 @@ void http_post();
 void http_setup();
 void wifi_setup();
 void http_post_task(void *pvParameters);
+void wifi_connection_task(void *pvParameters);
 
 
 

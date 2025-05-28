@@ -12,6 +12,9 @@
 #define debugMode 1
 #define receiverCode 0
 
+#define WIFI_CONNECT_BIT   (1 << 0)
+#define WIFI_DISCONNECT_BIT (1 << 1)
+
 static const uint8_t MAC_ADRESS_ROUTER_ESP[6] = {0x8c, 0x4b, 0x14, 0x14, 0x73, 0xb8};
 static const uint8_t MAC_ADRESS_SENDER_ESP[6] = {0x8c, 0x4b, 0x14, 0x15, 0xb3, 0x64}; // This is the MAC address of the ESP32 that will send the data
 
@@ -37,6 +40,7 @@ extern TaskHandle_t letterDetectionTaskHandle;
 extern TaskHandle_t espNowTaskHandle;
 extern TaskHandle_t httpPostTaskHandle;
 extern TaskHandle_t blinkLEDTaskHandle;
+extern TaskHandle_t wifiConnectionTaskHandle;
 
 extern volatile bool mailDetected;
 extern volatile bool esp_now_message_sent;

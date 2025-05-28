@@ -30,7 +30,7 @@ void setup(){
     while(!Serial); // Wait for the serial connection to be established
 
    
-    wifi_setup(); // Initialize WiFi connection
+    WiFi.mode(WIFI_STA); // Set the WiFi mode to station
     pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
 
     esp_err_t err = esp_now_init(); // Initialize ESP-NOW
@@ -43,6 +43,7 @@ void setup(){
     esp_now_register_recv_cb(OnDataRecv); // Register the callback function for receiving data
     xTaskCreate(http_post_task, "HTTP Post Task", 16400, NULL, 1, &httpPostTaskHandle); // Create the HTTP post task 
     xTaskCreate(blink_led_task, "Blink LED Task", 2048, NULL, 1, &blinkLEDTaskHandle); // Create the blink LED task
+    xTaskCreate(wifi)
 
     Serial.println(WiFi.macAddress()); // Print the MAC address of the ESP32
    
@@ -50,7 +51,7 @@ void setup(){
 void loop() {
 
 
-  
+
 }
 
 //Stack used during http_post: 14272 bytes
