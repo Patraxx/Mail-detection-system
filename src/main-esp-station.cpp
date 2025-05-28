@@ -12,24 +12,23 @@ TaskHandle_t httpPostTaskHandle;
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
  mailDetected = incomingData[0]; // Assuming the first byte indicates mail detection
+ Serial.println("Data received : " + String(mailDetected));
  if (mailDetected) {
    digitalWrite(greenLED, HIGH); // Turn on the LED to indicate mail detection
-   // xTaskNotifyGive(httpPostTaskHandle); // Notify the HTTP post task to send a notification
+   xTaskNotify(wifiConnectionTaskHandle, WIFI_CONNECT_BIT, eSetBits); // Notify the WiFi connection task to connect
  } else {
- 
    digitalWrite(greenLED, LOW); // Turn off the LED
  }
-
 }
 
 void setup(){
 
-    Serial.begin(11500); // Initialize serial communication at 115200 baud rate
+    Serial.begin(115200); // Initialize serial communication at 115200 baud rate
     while(!Serial); // Wait for the serial connection to be established
 
    
     WiFi.mode(WIFI_STA); // Set the WiFi mode to station
-    pinMode(greenLED, OUTPUT); // Set the final input pin as input with pull-down resistorg
+    pinMode(greenLED, OUTPUT); 
 
     esp_err_t err = esp_now_init(); // Initialize ESP-NOW
     if (err != ESP_OK) {

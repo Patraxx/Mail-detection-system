@@ -13,11 +13,12 @@ volatile unsigned long lastInterruptTime = 0; // Variable to store the last inte
 
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-               
+  bool sent = (mailDetected); // Check if the data was sent successfully    
+
   if (status == ESP_NOW_SEND_SUCCESS) {
-    Serial.println("Data sent successfully");
+    Serial.println("Data sent: " + String(sent)); // Print the status of the data sent
   } else {
-    Serial.println("Data send failed");
+    Serial.println("Send failed");
   }
 }
 
@@ -35,8 +36,12 @@ void IRAM_ATTR buttonOneInterrupt() {
 }
 
 void setup() {
+
+  Serial.begin(115200); // Initialize serial communication at 115200 baud rate
+  while (!Serial); // Wait for the serial connection to be established
+
   WiFi.mode(WIFI_STA); // Set the WiFi mode to station
-  esp_wifi_set_channel(5, WIFI_SECOND_CHAN_NONE); // Set the WiFi channel to 5
+  esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE); // Set the WiFi channel to 5
 
   uint8_t mac[6]; // Declare a byte array to hold the MAC address
  
@@ -56,11 +61,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(debugButton), buttonOneInterrupt, FALLING); // Attach interrupt to the debug button pin
   pinMode(FINAL_INPUT, INPUT_PULLDOWN);
 
-
-  Serial.begin(115200); // Initialize serial communication at 115200 baud rate
-  while (!Serial); // Wait for the serial connection to be established
-
-
+  
   compartmentMutex = xSemaphoreCreateMutex(); // Create a mutex for compartment access
   if (compartmentMutex == NULL) {
     Serial.println("Failed to create mutex");

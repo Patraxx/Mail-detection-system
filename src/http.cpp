@@ -41,11 +41,11 @@ void http_post_task(void *pvParameters) {
         // kolla om det blockar
 
         xTaskNotifyWait(0, 0, NULL, portMAX_DELAY); // Wait for notification from the letter detection task
-
-   
+ 
             http_post(); // Call the function to perform the HTTP POST request
+            Serial.println("on the way to turn off wifi");
 
-        xTaskNotify(wifiConnectionTaskHandle, WIFI_DISCONNECT_BIT, eSetBits); // Notify the WiFi connection task to reconnect if needed
+        xTaskNotify(wifiConnectionTaskHandle, WIFI_DISCONNECT_BIT, eSetBits); // Notify the WiFi connection task to disconnect
 
 
      
@@ -61,17 +61,17 @@ void wifi_connection_task(void *pvParameters) {
         if (ulNotificationValue & WIFI_CONNECT_BIT) {
             WiFi.begin(hemma_sssid, hemma_password);
             while (WiFi.status() != WL_CONNECTED) {
-                vTaskDelay(300 / portTICK_PERIOD_MS);
+                vTaskDelay(1000 / portTICK_PERIOD_MS); // Wait for connection
                 Serial.println("Connecting to WiFi...");
             }
             xTaskNotifyGive(httpPostTaskHandle);
         }
 
         if (ulNotificationValue & WIFI_DISCONNECT_BIT) {
-            WiFi.disconnect(true);
+            esp_wifi_disconnect(); // Disconnect from WiFi
             while (WiFi.status() == WL_CONNECTED) {
-               vTaskDelay(300 / portTICK_PERIOD_MS);
-                Serial.println("Disconnecting from WiFi...");
+               vTaskDelay(1000 / portTICK_PERIOD_MS);
+               Serial.println("Disconnecting from WiFi...");
             }
             esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
         }
