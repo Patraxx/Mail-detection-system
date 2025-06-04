@@ -1,6 +1,6 @@
 #include "http.h"
 
-#define PUSHBULLET_TOKEN "o.yo5tXDqVNx2LLWGejNJFnmnJ1vNiPbVF"
+#define PUSHBULLET_TOKEN "null"
 #define PUSHBULLET_URL "https://api.pushbullet.com/v2/pushes"
 #include "esp_crt_bundle.h"
 #include <WiFiClientSecure.h>
@@ -59,7 +59,7 @@ void wifi_connection_task(void *pvParameters) {
         xTaskNotifyWait(0, WIFI_CONNECT_BIT | WIFI_DISCONNECT_BIT, &ulNotificationValue, portMAX_DELAY);
 
         if (ulNotificationValue & WIFI_CONNECT_BIT) {
-            WiFi.begin(hemma_sssid, hemma_password);
+            WiFi.begin(ssid,password);
             while (WiFi.status() != WL_CONNECTED) {
                 vTaskDelay(1000 / portTICK_PERIOD_MS); // Wait for connection
                 Serial.println("Connecting to WiFi...");
